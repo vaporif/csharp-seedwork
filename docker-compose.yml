@@ -1,0 +1,23 @@
+version: '3.8'
+
+networks:
+  backend:
+
+services:
+  db:
+    container_name: db
+    image: postgres:13.4
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db:/var/lib/postgresql/data
+      - ./add-uuid.sql:/docker-entrypoint-initdb.d/add-uuid.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 15s
+      retries: 10
+    networks:
+      - backend
+    environment:
+      - POSTGRES_PASSWORD=PotatoeS123
