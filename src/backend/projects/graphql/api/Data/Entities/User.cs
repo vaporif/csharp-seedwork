@@ -18,5 +18,9 @@ namespace api.Data.Entities
         public string? Bio { get; set; }
 
         public ICollection<Post> Posts { get; set; } = new HashSet<Post>();
+
+        public Division? Division { get; set; }
+
+        public int? DivisionId { get; set; }
     }
 }

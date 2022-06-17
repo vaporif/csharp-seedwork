@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using api.Data;
@@ -11,9 +12,10 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220617141028_AddDivisionEmployee1")]
+    partial class AddDivisionEmployee1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,16 +108,11 @@ namespace api.Migrations
                     b.Property<string>("Bio")
                         .HasColumnType("text");
 
-                    b.Property<int?>("DivisionId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DivisionId");
 
                     b.ToTable("Users");
                 });
@@ -144,15 +141,6 @@ namespace api.Migrations
                     b.HasOne("api.Data.Entities.User", null)
                         .WithMany("Posts")
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("api.Data.Entities.User", b =>
-                {
-                    b.HasOne("api.Data.Entities.Division", "Division")
-                        .WithMany()
-                        .HasForeignKey("DivisionId");
-
-                    b.Navigation("Division");
                 });
 
             modelBuilder.Entity("api.Data.Entities.Division", b =>

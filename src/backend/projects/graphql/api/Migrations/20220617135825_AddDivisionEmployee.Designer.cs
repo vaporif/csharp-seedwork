@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using api.Data;
@@ -11,9 +12,10 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220617135825_AddDivisionEmployee")]
+    partial class AddDivisionEmployee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,7 +41,7 @@ namespace api.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Divisions");
+                    b.ToTable("Division");
                 });
 
             modelBuilder.Entity("api.Data.Entities.DivisionEmployee", b =>
@@ -71,7 +73,7 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employee");
                 });
 
             modelBuilder.Entity("api.Data.Entities.Post", b =>
@@ -106,16 +108,11 @@ namespace api.Migrations
                     b.Property<string>("Bio")
                         .HasColumnType("text");
 
-                    b.Property<int?>("DivisionId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DivisionId");
 
                     b.ToTable("Users");
                 });
@@ -123,7 +120,7 @@ namespace api.Migrations
             modelBuilder.Entity("api.Data.Entities.DivisionEmployee", b =>
                 {
                     b.HasOne("api.Data.Entities.Division", "Division")
-                        .WithMany("Employees")
+                        .WithMany("Sessions")
                         .HasForeignKey("DivisionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -146,18 +143,9 @@ namespace api.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("api.Data.Entities.User", b =>
-                {
-                    b.HasOne("api.Data.Entities.Division", "Division")
-                        .WithMany()
-                        .HasForeignKey("DivisionId");
-
-                    b.Navigation("Division");
-                });
-
             modelBuilder.Entity("api.Data.Entities.Division", b =>
                 {
-                    b.Navigation("Employees");
+                    b.Navigation("Sessions");
                 });
 
             modelBuilder.Entity("api.Data.Entities.User", b =>

@@ -1,5 +1,7 @@
 using api;
 using api.Data;
+using api.DataLoader;
+using api.Types;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
@@ -10,37 +12,44 @@ Log.Logger = new LoggerConfiguration()
             .WriteTo.Console()
             .CreateLogger();
 Serilog.Debugging.SelfLog.Enable(Console.Error);
+var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((context, services, configuration) => configuration
+                .ReadFrom.Configuration(context.Configuration)
+                .ReadFrom.Services(services)
+                .Enrich.FromLogContext()
+                .WriteTo.Console());
+
+builder.Services.AddPooledDbContextFactory<AppDbContext>(
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("AppDb")));
+
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<Query>()
+    .AddMutationType(d => d.Name("Mutation"))
+    .AddTypeExtension<UserMutations>()
+    .AddType<DivisionType>()
+    .AddType<UserType>()
+    .AddGlobalObjectIdentification()
+    .AddQueryFieldToMutationPayloads()
+    .AddDataLoader<UserByIdDataLoader>()
+    .AddDataLoader<DivisionByIdDataLoader>()
+    .AddDataLoader<EmployeeByIdDataLoader>();
+
+builder.Services.AddErrorFilter<GraphErrorFilter>();
+
+var app = builder.Build();
+
+app.UseSerilogRequestLogging();
+
+app.UseRouting();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapGraphQL();
+});
 
 try
 {
-    var builder = WebApplication.CreateBuilder(args);
-    builder.Host.UseSerilog((context, services, configuration) => configuration
-                    .ReadFrom.Configuration(context.Configuration)
-                    .ReadFrom.Services(services)
-                    .Enrich.FromLogContext()
-                    .WriteTo.Console());
-
-    builder.Services.AddDbContext<AppDbContext>(
-        options => options.UseNpgsql(builder.Configuration.GetConnectionString("AppDb")));
-
-    builder.Services
-        .AddGraphQLServer()
-        .AddQueryType<Query>()
-        .AddMutationType<Mutation>();
-
-    builder.Services.AddErrorFilter<GraphErrorFilter>();
-
-    var app = builder.Build();
-
-    app.UseSerilogRequestLogging();
-
-    app.UseRouting();
-
-    app.UseEndpoints(endpoints =>
-    {
-        endpoints.MapGraphQL();
-    });
-
     app.Run();
     return 0;
 }
