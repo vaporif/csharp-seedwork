@@ -22,58 +22,6 @@ namespace api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("api.Data.Entities.Division", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Divisions");
-                });
-
-            modelBuilder.Entity("api.Data.Entities.DivisionEmployee", b =>
-                {
-                    b.Property<int>("DivisionId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("DivisionId", "EmployeeId");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("DivisionEmployee");
-                });
-
-            modelBuilder.Entity("api.Data.Entities.Employee", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Employees");
-                });
-
             modelBuilder.Entity("api.Data.Entities.Post", b =>
                 {
                     b.Property<int>("Id")
@@ -106,37 +54,13 @@ namespace api.Migrations
                     b.Property<string>("Bio")
                         .HasColumnType("text");
 
-                    b.Property<int?>("DivisionId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DivisionId");
-
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("api.Data.Entities.DivisionEmployee", b =>
-                {
-                    b.HasOne("api.Data.Entities.Division", "Division")
-                        .WithMany("Employees")
-                        .HasForeignKey("DivisionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("api.Data.Entities.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Division");
-
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("api.Data.Entities.Post", b =>
@@ -144,20 +68,6 @@ namespace api.Migrations
                     b.HasOne("api.Data.Entities.User", null)
                         .WithMany("Posts")
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("api.Data.Entities.User", b =>
-                {
-                    b.HasOne("api.Data.Entities.Division", "Division")
-                        .WithMany()
-                        .HasForeignKey("DivisionId");
-
-                    b.Navigation("Division");
-                });
-
-            modelBuilder.Entity("api.Data.Entities.Division", b =>
-                {
-                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("api.Data.Entities.User", b =>

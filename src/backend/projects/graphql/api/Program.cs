@@ -2,6 +2,7 @@ using api;
 using api.Data;
 using api.DataLoader;
 using api.Types;
+using api.Users;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
@@ -24,16 +25,17 @@ builder.Services.AddPooledDbContextFactory<AppDbContext>(
 
 builder.Services
     .AddGraphQLServer()
-    .AddQueryType<Query>()
-    .AddMutationType(d => d.Name("Mutation"))
+    .AddQueryType()
+    .AddMutationType()
+    .AddTypeExtension<UserQueries>()
     .AddTypeExtension<UserMutations>()
-    .AddType<DivisionType>()
-    .AddType<UserType>()
-    .AddGlobalObjectIdentification()
+    // .AddType<UserType>()
+    // .AddGlobalObjectIdentification()
     .AddQueryFieldToMutationPayloads()
     .AddDataLoader<UserByIdDataLoader>()
-    .AddDataLoader<DivisionByIdDataLoader>()
-    .AddDataLoader<EmployeeByIdDataLoader>();
+    .AddFiltering()
+    .AddSorting()
+    .AddProjections();
 
 builder.Services.AddErrorFilter<GraphErrorFilter>();
 

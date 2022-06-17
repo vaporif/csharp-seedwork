@@ -20,22 +20,22 @@ namespace api.Types
                 .IdField(t => t.Id)
                 .ResolveNode((ctx, id) => ctx.DataLoader<UserByIdDataLoader>().LoadAsync(id, ctx.RequestAborted));
 
-            descriptor
-                .Field(t => t.Division)
-                .Resolve(d =>
-                {
-                    var user = d.Parent<User>();
-                    if (user.DivisionId is null)
-                        return null;
+            // descriptor
+            //     .Field(t => t.Division)
+            //     .Resolve(d =>
+            //     {
+            //         var user = d.Parent<User>();
+            //         if (user.DivisionId is null)
+            //             return null;
 
-                    return d.BatchDataLoader<int, Division>(
-                        async (keys, ct) =>
-                        {
-                            return await d.DbContext<AppDbContext>().Divisions.Where(s => keys.Contains(s.Id)).ToDictionaryAsync(x => x.Id, v => v);
-                        }).LoadAsync(user.DivisionId);
-                })
-                .UseDbContext<AppDbContext>()
-                .Name(nameof(Division).ToLower());
+            //         return d.BatchDataLoader<int, Division>(
+            //             async (keys, ct) =>
+            //             {
+            //                 return await d.DbContext<AppDbContext>().Divisions.Where(s => keys.Contains(s.Id)).ToDictionaryAsync(x => x.Id, v => v);
+            //             }).LoadAsync(user.DivisionId);
+            //     })
+            //     .UseDbContext<AppDbContext>()
+            //     .Name(nameof(Division).ToLower());
         }
 
     }
