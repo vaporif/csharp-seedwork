@@ -21,6 +21,7 @@ namespace ConferencePlanner.Api.Sessions
             CancellationToken cancellationToken)
             => speakerBySessionId.LoadAsync(session.Id, cancellationToken);
 
+        [UseDbContext(typeof(ApplicationDbContext))]
         [UsePaging(ConnectionName = "SessionAttendees")]
         [BindMember(nameof(Session.SessionAttendees), Replace = true)]
         public IQueryable<Attendee> GetAttendees(

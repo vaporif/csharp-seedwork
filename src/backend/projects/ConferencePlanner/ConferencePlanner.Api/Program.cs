@@ -27,6 +27,7 @@ builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(
 
 builder.Services
     .AddGraphQLServer()
+    .RegisterDbContext<ApplicationDbContext>()
     .AddType<UploadType>()
     .AddQueryType()
     .AddMutationType()
