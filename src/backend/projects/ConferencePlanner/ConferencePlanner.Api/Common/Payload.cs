@@ -1,0 +1,14 @@
+using System.Collections.Generic;
+
+namespace ConferencePlanner.Api.Common
+{
+    public abstract class Payload
+    {
+        protected Payload(IReadOnlyList<UserError>? errors = null)
+        {
+            Errors = errors;
+        }
+
+        public IReadOnlyList<UserError>? Errors { get; }
+    }
+}
