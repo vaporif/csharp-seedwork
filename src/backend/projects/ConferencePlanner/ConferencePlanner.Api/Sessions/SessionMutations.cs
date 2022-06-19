@@ -11,10 +11,10 @@ namespace ConferencePlanner.Api.Sessions
     [ExtendObjectType(OperationTypeNames.Mutation)]
     public class SessionMutations
     {
-        [UseDbContext(typeof(ApplicationDbContext))]
+        
         public async Task<AddSessionPayload> AddSessionAsync(
             AddSessionInput input,
-            [ScopedService] ApplicationDbContext context,
+             ApplicationDbContext context,
             CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(input.Title))
@@ -49,10 +49,10 @@ namespace ConferencePlanner.Api.Sessions
             return new AddSessionPayload(session);
         }
 
-        [UseDbContext(typeof(ApplicationDbContext))]
+        
         public async Task<ScheduleSessionPayload> ScheduleSessionAsync(
             ScheduleSessionInput input,
-            [ScopedService] ApplicationDbContext context,
+             ApplicationDbContext context,
             [Service]ITopicEventSender eventSender)
         {
             if (input.EndTime < input.StartTime)
@@ -82,10 +82,10 @@ namespace ConferencePlanner.Api.Sessions
             return new ScheduleSessionPayload(session);
         }
 
-        [UseDbContext(typeof(ApplicationDbContext))]
+        
         public async Task<RenameSessionPayload> RenameSessionAsync(
             RenameSessionInput input,
-            [ScopedService] ApplicationDbContext context,
+             ApplicationDbContext context,
             [Service]ITopicEventSender eventSender)
         {
             var session = await context.Sessions.FindAsync(input.SessionId);

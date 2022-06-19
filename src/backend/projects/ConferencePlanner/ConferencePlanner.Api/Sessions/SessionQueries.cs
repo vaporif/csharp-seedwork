@@ -14,13 +14,13 @@ namespace ConferencePlanner.Api.Sessions
     [ExtendObjectType(OperationTypeNames.Query)]
     public class SessionQueries
     {
-        [UseDbContext(typeof(ApplicationDbContext))]
+        // 
         [UseOffsetPaging(IncludeTotalCount = true)]
         [UseProjection]
         [UseFiltering(typeof(SessionFilterInputType))]
         [UseSorting]
         public IQueryable<Session> GetSessions(
-            [ScopedService] ApplicationDbContext context)
+            ApplicationDbContext context)
             => context.Sessions.OrderBy(d => d.Id);
 
         public Task<Session> GetSessionByIdAsync(

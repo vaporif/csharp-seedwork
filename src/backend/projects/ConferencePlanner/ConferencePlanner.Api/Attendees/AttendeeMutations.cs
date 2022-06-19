@@ -12,10 +12,10 @@ namespace ConferencePlanner.Api.Attendees
     [ExtendObjectType(OperationTypeNames.Mutation)]
     public class AttendeeMutations
     {
-        [UseDbContext(typeof(ApplicationDbContext))]
+        
         public async Task<RegisterAttendeePayload> RegisterAttendeeAsync(
             RegisterAttendeeInput input,
-            [ScopedService] ApplicationDbContext context,
+            ApplicationDbContext context,
             CancellationToken cancellationToken)
         {
             var attendee = new Attendee
@@ -33,10 +33,10 @@ namespace ConferencePlanner.Api.Attendees
             return new RegisterAttendeePayload(attendee);
         }
 
-        [UseDbContext(typeof(ApplicationDbContext))]
+        
         public async Task<CheckInAttendeePayload> CheckInAttendeeAsync(
             CheckInAttendeeInput input,
-            [ScopedService] ApplicationDbContext context,
+            ApplicationDbContext context,
             [Service] ITopicEventSender eventSender,
             CancellationToken cancellationToken)
         {

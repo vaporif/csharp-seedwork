@@ -11,10 +11,10 @@ namespace ConferencePlanner.Api.Speakers
     [ExtendObjectType(OperationTypeNames.Mutation)]
     public class SpeakerMutations
     {
-        [UseDbContext(typeof(ApplicationDbContext))]
+        
         public async Task<AddSpeakerPayload> AddSpeakerAsync(
             AddSpeakerInput input,
-            [ScopedService] ApplicationDbContext context,
+             ApplicationDbContext context,
             CancellationToken cancellationToken)
         {
             var speaker = new Speaker
@@ -30,10 +30,10 @@ namespace ConferencePlanner.Api.Speakers
             return new AddSpeakerPayload(speaker);
         }
 
-        [UseDbContext(typeof(ApplicationDbContext))]
+        
         public async Task<ModifySpeakerPayload> ModifySpeakerAsync(
             ModifySpeakerInput input,
-            [ScopedService] ApplicationDbContext context,
+             ApplicationDbContext context,
             CancellationToken cancellationToken)
         {
             if (input.Name.HasValue && input.Name.Value is null)
@@ -70,10 +70,10 @@ namespace ConferencePlanner.Api.Speakers
             return new ModifySpeakerPayload(speaker);
         }
 
-        [UseDbContext(typeof(ApplicationDbContext))]
+        
         public async Task<UploadSpeakerPhotoPayload> UploadSpeakerPhotoAsync(
             UploadSpeakerPhotoInput input,
-            [ScopedService] ApplicationDbContext context,
+             ApplicationDbContext context,
             CancellationToken cancellationToken)
         {
             Speaker? speaker = await context.Speakers.FindAsync(input.Id);

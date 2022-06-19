@@ -22,7 +22,7 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                 .Enrich.FromLogContext()
                 .WriteTo.Console());
 
-builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(
+builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("AppDb")));
 
 builder.Services
@@ -54,7 +54,7 @@ builder.Services
     .AddFiltering()
     .AddSorting()
     .AddProjections()
-    .EnsureDatabaseIsCreated()
+    // .EnsureDatabaseIsCreated()
     .AddGlobalObjectIdentification()
     .AddQueryFieldToMutationPayloads()
     // Since we are using subscriptions, we need to register a pub/sub system.

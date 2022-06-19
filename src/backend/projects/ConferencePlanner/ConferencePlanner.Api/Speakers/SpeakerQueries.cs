@@ -13,10 +13,10 @@ namespace ConferencePlanner.Api.Speakers
     [ExtendObjectType(OperationTypeNames.Query)]
     public class SpeakerQueries
     {
-        [UseDbContext(typeof(ApplicationDbContext))]
+        
         [UsePaging]
         public IQueryable<Speaker> GetSpeakers(
-            [ScopedService] ApplicationDbContext context) 
+             ApplicationDbContext context) 
             => context.Speakers.OrderBy(t => t.Name);
 
         public Task<Speaker> GetSpeakerByIdAsync(

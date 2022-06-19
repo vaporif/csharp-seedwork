@@ -22,12 +22,12 @@ namespace ConferencePlanner.Api.Sessions
             CancellationToken cancellationToken)
             => (await speakerBySessionId.LoadAsync(session.Id, cancellationToken)).AsQueryable();
 
-        [UseDbContext(typeof(ApplicationDbContext))]
+        
         [UsePaging(ConnectionName = "SessionAttendees")]
         [BindMember(nameof(Session.SessionAttendees), Replace = true)]
         public IQueryable<Attendee> GetAttendees(
             [Parent] Session session,
-            [ScopedService] ApplicationDbContext dbContext)
+             ApplicationDbContext dbContext)
             => dbContext.Sessions
                 .Where(s => s.Id == session.Id)
                 .Include(s => s.SessionAttendees)

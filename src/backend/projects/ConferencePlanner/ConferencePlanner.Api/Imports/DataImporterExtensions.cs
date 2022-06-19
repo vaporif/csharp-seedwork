@@ -12,9 +12,9 @@ namespace ConferencePlanner.Api.Imports
             this IRequestExecutorBuilder builder) =>
             builder.ConfigureSchemaAsync(async (services, _, ct) =>
             {
-                IDbContextFactory<ApplicationDbContext> factory =
-                    services.GetRequiredService<IDbContextFactory<ApplicationDbContext>>();
-                await using ApplicationDbContext dbContext = factory.CreateDbContext();
+                ApplicationDbContext context =
+                    services.GetRequiredService<ApplicationDbContext>();
+                await using ApplicationDbContext dbContext = context;
 
                 if (await dbContext.Database.EnsureCreatedAsync(ct))
                 {

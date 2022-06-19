@@ -16,11 +16,11 @@ namespace ConferencePlanner.Api.Tracks
         [UseUpperCase]
         public string GetName([Parent] Track track) => track.Name!;
         
-        [UseDbContext(typeof(ApplicationDbContext))]
+        
         [UsePaging(ConnectionName = "TrackSessions")]
         public IQueryable<Session> GetSessions(
             [Parent] Track track,
-            [ScopedService] ApplicationDbContext dbContext)
+             ApplicationDbContext dbContext)
             => dbContext.Tracks.Where(t => t.Id == track.Id).SelectMany(t => t.Sessions);
 
         [NodeResolver]

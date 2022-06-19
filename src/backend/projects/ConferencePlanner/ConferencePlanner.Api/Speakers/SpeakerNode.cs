@@ -54,16 +54,14 @@ namespace ConferencePlanner.Api.Speakers
 
         public async IAsyncEnumerable<Session> GetSessionsStreamAsync(
             [Parent] Speaker speaker,
-            [Service] IDbContextFactory<ApplicationDbContext> contextFactory,
+            ApplicationDbContext dbContext,
             [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var random = new Random();
 
             await Task.Delay(random.Next(500, 1000), cancellationToken);
 
-            await using var context = contextFactory.CreateDbContext();
-
-            var stream = (IAsyncEnumerable<SessionSpeaker>)context.Speakers
+            var stream = (IAsyncEnumerable<SessionSpeaker>)dbContext.Speakers
                 .Where(s => s.Id == speaker.Id)
                 .Include(s => s.SessionSpeakers)
                 .SelectMany(s => s.SessionSpeakers)

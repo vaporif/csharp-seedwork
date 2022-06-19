@@ -12,26 +12,23 @@ namespace ConferencePlanner.Api.DataLoader
     public class SessionBySpeakerIdDataLoader : GroupedDataLoader<int, Session>
     {
         private static readonly string _sessionCacheKey = GetCacheKeyType<SessionByIdDataLoader>();
-        private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
+        private readonly ApplicationDbContext _dbContext;
 
         public SessionBySpeakerIdDataLoader(
-            IDbContextFactory<ApplicationDbContext> dbContextFactory,
+            ApplicationDbContext dbContext,
             IBatchScheduler batchScheduler,
             DataLoaderOptions options)
             : base(batchScheduler, options)
         {
-            _dbContextFactory = dbContextFactory ??
-                throw new ArgumentNullException(nameof(dbContextFactory));
+            _dbContext = dbContext ?? 
+                throw new ArgumentNullException(nameof(dbContext));
         }
 
         protected override async Task<ILookup<int, Session>> LoadGroupedBatchAsync(
             IReadOnlyList<int> keys,
             CancellationToken cancellationToken)
         {
-            await using ApplicationDbContext dbContext =
-                _dbContextFactory.CreateDbContext();
-
-            List<SessionSpeaker> list = await dbContext.Speakers
+            List<SessionSpeaker> list = await _dbContext.Speakers
                 .Where(s => keys.Contains(s.Id))
                 .Include(s => s.SessionSpeakers)
                 .SelectMany(s => s.SessionSpeakers)

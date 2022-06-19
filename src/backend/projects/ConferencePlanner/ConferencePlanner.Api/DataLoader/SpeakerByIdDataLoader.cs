@@ -11,26 +11,23 @@ namespace ConferencePlanner.Api.DataLoader
 {
     public class SpeakerByIdDataLoader : BatchDataLoader<int, Speaker>
     {
-        private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
+        private readonly ApplicationDbContext _dbContext;
 
         public SpeakerByIdDataLoader(
-            IDbContextFactory<ApplicationDbContext> dbContextFactory,
+            ApplicationDbContext dbContext,
             IBatchScheduler batchScheduler,
             DataLoaderOptions options)
             : base(batchScheduler, options)
         {
-            _dbContextFactory = dbContextFactory ?? 
-                throw new ArgumentNullException(nameof(dbContextFactory));
+            _dbContext = dbContext ?? 
+                throw new ArgumentNullException(nameof(dbContext));
         }
 
         protected override async Task<IReadOnlyDictionary<int, Speaker>> LoadBatchAsync(
             IReadOnlyList<int> keys, 
             CancellationToken cancellationToken)
         {
-            await using ApplicationDbContext dbContext = 
-                _dbContextFactory.CreateDbContext();
-
-            return await dbContext.Speakers
+            return await _dbContext.Speakers
                 .Where(s => keys.Contains(s.Id))
                 .ToDictionaryAsync(t => t.Id, cancellationToken);
         }

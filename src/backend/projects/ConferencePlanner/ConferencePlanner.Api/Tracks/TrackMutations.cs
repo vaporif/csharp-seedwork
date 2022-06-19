@@ -9,10 +9,10 @@ namespace ConferencePlanner.Api.Tracks
     [ExtendObjectType(OperationTypeNames.Mutation)]
     public class TrackMutations
     {
-        [UseDbContext(typeof(ApplicationDbContext))]
+        
         public async Task<AddTrackPayload> AddTrackAsync(
             AddTrackInput input,
-            [ScopedService] ApplicationDbContext context,
+             ApplicationDbContext context,
             CancellationToken cancellationToken)
         {
             var track = new Track { Name = input.Name };
@@ -23,10 +23,10 @@ namespace ConferencePlanner.Api.Tracks
             return new AddTrackPayload(track);
         }
 
-        [UseDbContext(typeof(ApplicationDbContext))]
+        
         public async Task<RenameTrackPayload> RenameTrackAsync(
             RenameTrackInput input,
-            [ScopedService] ApplicationDbContext context,
+             ApplicationDbContext context,
             CancellationToken cancellationToken)
         {
             var track = await context.Tracks.FindAsync(input.Id, cancellationToken);
