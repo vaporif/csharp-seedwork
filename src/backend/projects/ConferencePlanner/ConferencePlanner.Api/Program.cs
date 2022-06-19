@@ -55,6 +55,8 @@ builder.Services
     .AddSorting()
     .AddProjections()
     .EnsureDatabaseIsCreated()
+    .AddGlobalObjectIdentification()
+    .AddQueryFieldToMutationPayloads()
     // Since we are using subscriptions, we need to register a pub/sub system.
     // for our demo we are using a in-memory pub/sub system.
     .AddInMemorySubscriptions();

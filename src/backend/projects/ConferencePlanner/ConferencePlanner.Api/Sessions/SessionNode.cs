@@ -15,11 +15,12 @@ namespace ConferencePlanner.Api.Sessions
     public class SessionNode
     {
         [BindMember(nameof(Session.SessionSpeakers), Replace = true)]
-        public Task<Speaker[]> GetSpeakersAsync(
+        [UseProjection]
+        public async Task<IQueryable<Speaker>> GetSpeakersAsync(
             [Parent] Session session,
             SpeakerBySessionIdDataLoader speakerBySessionId,
             CancellationToken cancellationToken)
-            => speakerBySessionId.LoadAsync(session.Id, cancellationToken);
+            => (await speakerBySessionId.LoadAsync(session.Id, cancellationToken)).AsQueryable();
 
         [UseDbContext(typeof(ApplicationDbContext))]
         [UsePaging(ConnectionName = "SessionAttendees")]
