@@ -6,6 +6,7 @@ using ConferencePlanner.Api.Imports;
 using ConferencePlanner.Api.Sessions;
 using ConferencePlanner.Api.Speakers;
 using ConferencePlanner.Api.Tracks;
+using ConferencePlanner.GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
@@ -34,23 +35,27 @@ builder.Services
     .AddTypeExtension<AttendeeQueries>()
     .AddTypeExtension<AttendeeMutations>()
     .AddTypeExtension<AttendeeSubscriptions>()
-    .AddTypeExtension<AttendeeNode>()
+    // .AddTypeExtension<AttendeeNode>()
     .AddDataLoader<AttendeeByIdDataLoader>()
     .AddTypeExtension<SessionQueries>()
     .AddTypeExtension<SessionMutations>()
     .AddTypeExtension<SessionSubscriptions>()
-    .AddTypeExtension<SessionNode>()
+    // .AddTypeExtension<SessionNode>()
     .AddDataLoader<SessionByIdDataLoader>()
     .AddDataLoader<SessionBySpeakerIdDataLoader>()  
     .AddTypeExtension<SpeakerQueries>()
     .AddTypeExtension<SpeakerMutations>()
-    .AddTypeExtension<SpeakerNode>()
+    // .AddTypeExtension<SpeakerNode>()
     .AddDataLoader<SpeakerByIdDataLoader>()
     .AddDataLoader<SessionBySpeakerIdDataLoader>()   
     .AddTypeExtension<TrackQueries>()
     .AddTypeExtension<TrackMutations>()
-    .AddTypeExtension<TrackNode>()
+    // .AddTypeExtension<TrackNode>()
     .AddDataLoader<TrackByIdDataLoader>()
+    .AddType<AttendeeType>()
+    .AddType<SessionType>()
+    .AddType<SpeakerType>()
+    .AddType<TrackType>()
     .AddFiltering()
     .AddSorting()
     .AddProjections()
