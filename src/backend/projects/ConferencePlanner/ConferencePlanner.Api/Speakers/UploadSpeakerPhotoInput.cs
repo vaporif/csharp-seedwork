@@ -1,4 +1,4 @@
-using ConferencePlanner.Api.Data;
+
 using HotChocolate.Types;
 using HotChocolate.Types.Relay;
 

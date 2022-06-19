@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace ConferencePlanner.Api.Data
+namespace ConferencePlanner.Domain.Entities
 {
     public class Speaker
     {

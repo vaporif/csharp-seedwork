@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using ConferencePlanner.Api.Data;
+
 using ConferencePlanner.Api.DataLoader;
 using HotChocolate;
 using HotChocolate.Types;

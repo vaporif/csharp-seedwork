@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ConferencePlanner.Api.Common;
-using ConferencePlanner.Api.Data;
+
 using ConferencePlanner.Api.DataLoader;
 using HotChocolate;
 

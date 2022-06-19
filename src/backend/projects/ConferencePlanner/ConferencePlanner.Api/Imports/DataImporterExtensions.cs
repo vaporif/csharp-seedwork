@@ -1,5 +1,5 @@
 
-using ConferencePlanner.Api.Data;
+
 using HotChocolate.Execution.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

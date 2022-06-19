@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ConferencePlanner.Api.Common;
-using ConferencePlanner.Api.Data;
+
 using HotChocolate;
 using HotChocolate.Subscriptions;
 using HotChocolate.Types;

@@ -1,6 +1,7 @@
+using ConferencePlanner.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ConferencePlanner.Api.Data
+namespace ConferencePlanner.Infrastructure
 {
     public class ApplicationDbContext : DbContext
     {

@@ -21,4 +21,8 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ConferencePlanner.Infrastructure\ConferencePlanner.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

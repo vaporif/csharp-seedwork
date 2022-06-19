@@ -1,4 +1,4 @@
-using ConferencePlanner.Api.Data;
+
 using HotChocolate.Types.Relay;
 
 namespace ConferencePlanner.Api.Sessions

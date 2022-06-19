@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using ConferencePlanner.Api.Common;
-using ConferencePlanner.Api.Data;
+
 
 namespace ConferencePlanner.Api.Sessions
 {

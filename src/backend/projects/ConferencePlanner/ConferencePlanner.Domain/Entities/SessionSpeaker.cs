@@ -1,4 +1,4 @@
-namespace ConferencePlanner.Api.Data
+namespace ConferencePlanner.Domain.Entities
 {
     public class SessionSpeaker
     {

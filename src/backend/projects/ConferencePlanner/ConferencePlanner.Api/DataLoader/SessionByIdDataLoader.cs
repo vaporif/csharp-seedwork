@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ConferencePlanner.Api.Data;
+
 using GreenDonut;
 
 namespace ConferencePlanner.Api.DataLoader
@@ -26,7 +26,7 @@ namespace ConferencePlanner.Api.DataLoader
         protected override async Task<IReadOnlyDictionary<int, Session>> LoadBatchAsync(
             IReadOnlyList<int> keys, 
             CancellationToken cancellationToken)
-        {
+        {         
             return await _dbContext.Sessions
                 .Where(s => keys.Contains(s.Id))
                 .ToDictionaryAsync(t => t.Id, cancellationToken);

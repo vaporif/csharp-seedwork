@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ConferencePlanner.Api.Data;
+
 using GreenDonut;
 
 namespace ConferencePlanner.Api.DataLoader

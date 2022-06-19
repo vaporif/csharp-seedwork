@@ -1,6 +1,8 @@
+global using ConferencePlanner.Infrastructure;
+global using ConferencePlanner.Domain.Entities;
+
 using ConferencePlanner.Api;
 using ConferencePlanner.Api.Attendees;
-using ConferencePlanner.Api.Data;
 using ConferencePlanner.Api.DataLoader;
 using ConferencePlanner.Api.Imports;
 using ConferencePlanner.Api.Sessions;

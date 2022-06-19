@@ -1,4 +1,4 @@
-using ConferencePlanner.Api.Data;
+
 using HotChocolate.Data.Filters;
 
 namespace ConferencePlanner.Api.Sessions
