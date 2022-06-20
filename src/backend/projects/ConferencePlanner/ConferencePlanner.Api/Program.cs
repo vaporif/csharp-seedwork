@@ -102,6 +102,8 @@ app.UseSerilogRequestLogging().UseRouting();
 
 app.UseRouting();
 
+app.UseWebSockets();
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapGraphQL();
