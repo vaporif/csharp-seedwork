@@ -40,6 +40,7 @@ builder.Services
     .AddType<UploadType>()
     .AddQueryType()
     .AddMutationType()
+    .AddSubscriptionType()
     .AddTypeExtension<AttendeeQueries>()
     .AddTypeExtension<AttendeeMutations>()
     .AddTypeExtension<AttendeeSubscriptions>()
@@ -53,6 +54,10 @@ builder.Services
     .AddTypeExtension<SpeakerQueries>()
     .AddTypeExtension<SpeakerMutations>()
     .AddTypeExtension<MeetingQueries>()
+    .AddTypeExtension<MeetingMutations>()
+    .AddTypeExtension<MeetingSubscriptions>()
+    .AddTypeExtension<SessionSubscriptions>()
+    .AddTypeExtension<AttendeeSubscriptions>()
     // .AddTypeExtension<SpeakerNode>()
     .AddDataLoader<SpeakerByIdDataLoader>() 
     .AddTypeExtension<TrackQueries>()
@@ -120,7 +125,6 @@ try
             var importer = new DataImporter();
             await importer.LoadDataAsync(dbContext);
 
-            Log.Information(dbContext.Meetings.Count().ToString());
             if(!dbContext.Meetings.Any())
             {
                 Log.Information("generating fake data");
