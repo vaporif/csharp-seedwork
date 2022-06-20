@@ -23,8 +23,8 @@ namespace ConferencePlanner.GraphQL.Types
 
             descriptor
                 .Field(t => t.SessionSpeakers)
-                // .ResolveWith<SessionResolvers>(t => t.GetSpeakersAsync(default!, default!, default!, default))
-                // .UseDbContext<ApplicationDbContext>()
+                .ResolveWith<SessionResolvers>(t => t.GetSpeakersAsync(default!, default!, default!, default))
+                .UseDbContext<ApplicationDbContext>()
                 .Name("speakers");
 
             descriptor
