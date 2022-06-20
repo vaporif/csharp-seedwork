@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Authorization;
 using HealthChecks.UI.Client;
+using Bogus;
+using ConferencePlanner.Api.Meetings;
 
 Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
@@ -50,6 +52,7 @@ builder.Services
     .AddDataLoader<SessionByIdDataLoader>()
     .AddTypeExtension<SpeakerQueries>()
     .AddTypeExtension<SpeakerMutations>()
+    .AddTypeExtension<MeetingQueries>()
     // .AddTypeExtension<SpeakerNode>()
     .AddDataLoader<SpeakerByIdDataLoader>() 
     .AddTypeExtension<TrackQueries>()
@@ -59,6 +62,7 @@ builder.Services
     .AddType<AttendeeType>()
     .AddType<SessionType>()
     .AddType<SpeakerType>()
+    .AddType<MeetingType>()
     .AddType<TrackType>()
     .AddFiltering()
     .AddSorting()
@@ -68,6 +72,7 @@ builder.Services
     .AddQueryFieldToMutationPayloads()
     // Since we are using subscriptions, we need to register a pub/sub system.
     // for our demo we are using a in-memory pub/sub system.
+    .InitializeOnStartup()
     .AddInMemorySubscriptions();
     // Last we add support for persisted queries. 
     // The first line adds the persisted query storage, 
@@ -104,6 +109,36 @@ app.UseEndpoints(endpoints =>
 
 try
 {
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<IDbContextFactory<ApplicationDbContext>>();
+        await using ApplicationDbContext dbContext = context.CreateDbContext();
+
+        if (await dbContext.Database.EnsureCreatedAsync())
+        {
+            var importer = new DataImporter();
+            await importer.LoadDataAsync(dbContext);
+
+            Log.Information(dbContext.Meetings.Count().ToString());
+            if(!dbContext.Meetings.Any())
+            {
+                Log.Information("generating fake data");
+                var fakerPart = new Faker<Participiant>()
+                    .RuleFor(f => f.FirstName, f => f.Name.FirstName())
+                    .RuleFor(d => d.LastName, f => f.Name.LastName());
+                var faker = new Faker<Meeting>()
+                    .RuleFor(d => d.Id, 0)
+                    .RuleFor(d => d.Name, f => f.Company.CatchPhrase())
+                    .RuleFor(d => d.Organizer, f => new MeetingOrganizer{ FirstName = f.Person.FirstName, LastName = f.Person.LastName })
+                    .RuleFor(d => d.Participiants, f => fakerPart.GenerateBetween(2, 20));
+
+                var meetings = faker.Generate(200);
+                await dbContext.Meetings.AddRangeAsync(meetings);
+                await dbContext.SaveChangesAsync();
+            }
+        }
+    }
     app.Run();
     return 0;
 }

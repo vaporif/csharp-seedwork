@@ -14,9 +14,8 @@ namespace ConferencePlanner.Api.Sessions
     [ExtendObjectType(OperationTypeNames.Query)]
     public class SessionQueries
     {
-        // 
         [UseOffsetPaging(IncludeTotalCount = true)]
-        // [UseProjection]
+        [UseProjection]
         [UseFiltering(typeof(SessionFilterInputType))]
         [UseSorting]
         public IQueryable<Session> GetSessions(

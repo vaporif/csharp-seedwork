@@ -30,6 +30,8 @@ namespace ConferencePlanner.Infrastructure
 
         public DbSet<Session> Sessions { get; set; } = default!;
 
+        public DbSet<Meeting> Meetings { get; set; } = default!;
+
         public DbSet<Track> Tracks { get; set; } = default!;
 
         public DbSet<Speaker> Speakers { get; set; } = default!;

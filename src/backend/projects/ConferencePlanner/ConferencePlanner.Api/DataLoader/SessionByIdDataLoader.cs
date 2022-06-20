@@ -28,6 +28,8 @@ namespace ConferencePlanner.Api.DataLoader
             await using ApplicationDbContext dbContext =
                 _dbContextFactory.CreateDbContext();
 
+            Console.WriteLine(string.Join(",", keys));
+
             return await dbContext.Sessions
                 .Where(s => keys.Contains(s.Id))
                 .ToDictionaryAsync(t => t.Id, cancellationToken);

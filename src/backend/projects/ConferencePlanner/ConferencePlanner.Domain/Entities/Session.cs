@@ -26,10 +26,10 @@ namespace ConferencePlanner.Domain.Entities
 
         public int? TrackId { get; set; }
 
-        public ICollection<SessionSpeaker> SessionSpeakers { get; set; } = 
+        public List<SessionSpeaker> SessionSpeakers { get; set; } = 
             new List<SessionSpeaker>();
 
-        public ICollection<SessionAttendee> SessionAttendees { get; set; } = 
+        public List<SessionAttendee> SessionAttendees { get; set; } = 
             new List<SessionAttendee>();
 
         public Track? Track { get; set; }
