@@ -12,6 +12,10 @@ using ConferencePlanner.GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Authorization;
+using HealthChecks.UI.Client;
 
 Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
@@ -74,17 +78,30 @@ builder.Services
     // .AddFileSystemQueryStorage("./persisted_queries")
     // .UsePersistedQueryPipeline();
 
+builder.Services.AddHealthChecks();
+    
+
 builder.Services.AddErrorFilter<GraphErrorFilter>();
 
 var app = builder.Build();
 
-app.UseSerilogRequestLogging();
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
+app.UseSerilogRequestLogging().UseRouting();
 
 app.UseRouting();
 
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapGraphQL();
+
+    endpoints.MapHealthChecks("/health", new HealthCheckOptions()
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    }).WithMetadata(new AllowAnonymousAttribute());
 });
 
 try

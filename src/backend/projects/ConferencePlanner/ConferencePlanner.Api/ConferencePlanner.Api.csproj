@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="6.0.4" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.4" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="5.0.2" />
+    <PackageReference Include="prometheus-net.AspNetCore.HealthChecks" Version="6.0.0" />
     <PackageReference Include="HotChocolate.AspNetCore" Version="12.11.1" />
     <PackageReference Include="HotChocolate.Data.EntityFramework" Version="12.11.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.6" />
