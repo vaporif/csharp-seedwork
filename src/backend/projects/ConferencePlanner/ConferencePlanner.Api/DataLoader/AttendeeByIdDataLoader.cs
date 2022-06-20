@@ -4,29 +4,31 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-
 using GreenDonut;
 
 namespace ConferencePlanner.Api.DataLoader
 {
     public class AttendeeByIdDataLoader : BatchDataLoader<int, Attendee>
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
 
         public AttendeeByIdDataLoader(
-            ApplicationDbContext dbContext,
             IBatchScheduler batchScheduler,
-            DataLoaderOptions options)
-            : base(batchScheduler, options)
+            IDbContextFactory<ApplicationDbContext> dbContextFactory)
+            : base(batchScheduler)
         {
-            _dbContext = dbContext;
+            _dbContextFactory = dbContextFactory ?? 
+                throw new ArgumentNullException(nameof(dbContextFactory));
         }
 
         protected override async Task<IReadOnlyDictionary<int, Attendee>> LoadBatchAsync(
             IReadOnlyList<int> keys,
             CancellationToken cancellationToken)
         {
-            return await _dbContext.Attendees
+            await using ApplicationDbContext dbContext = 
+                _dbContextFactory.CreateDbContext();
+
+            return await dbContext.Attendees
                 .Where(s => keys.Contains(s.Id))
                 .ToDictionaryAsync(t => t.Id, cancellationToken);
         }

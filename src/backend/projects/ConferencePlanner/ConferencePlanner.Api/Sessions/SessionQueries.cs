@@ -16,7 +16,7 @@ namespace ConferencePlanner.Api.Sessions
     {
         // 
         [UseOffsetPaging(IncludeTotalCount = true)]
-        [UseProjection]
+        // [UseProjection]
         [UseFiltering(typeof(SessionFilterInputType))]
         [UseSorting]
         public IQueryable<Session> GetSessions(

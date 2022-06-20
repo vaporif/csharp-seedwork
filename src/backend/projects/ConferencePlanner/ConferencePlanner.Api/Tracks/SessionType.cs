@@ -44,8 +44,8 @@ namespace ConferencePlanner.GraphQL.Types
 
         private class SessionResolvers
         {
-            public async Task<IEnumerable<Speaker>> GetSpeakersAsync(
-                Session session,
+            public async Task<IReadOnlyList<Speaker>> GetSpeakersAsync(
+                [Parent]Session session,
                 ApplicationDbContext dbContext,
                 SpeakerByIdDataLoader speakerById,
                 CancellationToken cancellationToken)
@@ -59,8 +59,8 @@ namespace ConferencePlanner.GraphQL.Types
                 return await speakerById.LoadAsync(speakerIds, cancellationToken);
             }
 
-            public async Task<IEnumerable<Attendee>> GetAttendeesAsync(
-                Session session,
+            public async Task<IReadOnlyList<Attendee>> GetAttendeesAsync(
+                [Parent]Session session,
                 ApplicationDbContext dbContext,
                 AttendeeByIdDataLoader attendeeById,
                 CancellationToken cancellationToken)
@@ -75,7 +75,7 @@ namespace ConferencePlanner.GraphQL.Types
             }
 
             public async Task<Track?> GetTrackAsync(
-                Session session,
+                [Parent]Session session,
                 TrackByIdDataLoader trackById,
                 CancellationToken cancellationToken)
             {

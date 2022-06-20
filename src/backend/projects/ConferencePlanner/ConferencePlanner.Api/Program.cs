@@ -29,12 +29,12 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                 .Enrich.FromLogContext()
                 .WriteTo.Console());
 
-builder.Services.AddDbContext<ApplicationDbContext>(
+builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("AppDb")));
 
 builder.Services
     .AddGraphQLServer()
-    .RegisterDbContext<ApplicationDbContext>()
+    .RegisterDbContext<ApplicationDbContext>(DbContextKind.Pooled)
     .AddType<UploadType>()
     .AddQueryType()
     .AddMutationType()
@@ -46,14 +46,12 @@ builder.Services
     .AddTypeExtension<SessionQueries>()
     .AddTypeExtension<SessionMutations>()
     .AddTypeExtension<SessionSubscriptions>()
-    // .AddTypeExtension<SessionNode>()
+    // .AddTypeExtension<SessionNode>() 
     .AddDataLoader<SessionByIdDataLoader>()
-    .AddDataLoader<SessionBySpeakerIdDataLoader>()  
     .AddTypeExtension<SpeakerQueries>()
     .AddTypeExtension<SpeakerMutations>()
     // .AddTypeExtension<SpeakerNode>()
-    .AddDataLoader<SpeakerByIdDataLoader>()
-    .AddDataLoader<SessionBySpeakerIdDataLoader>()   
+    .AddDataLoader<SpeakerByIdDataLoader>() 
     .AddTypeExtension<TrackQueries>()
     .AddTypeExtension<TrackMutations>()
     // .AddTypeExtension<TrackNode>()
