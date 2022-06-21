@@ -34,27 +34,17 @@ builder.Services
     .AddQueryType()
     .AddMutationType()
     .AddSubscriptionType()
-    .AddType<MeetingType>()
         .AddTypeExtension<MeetingQueries>()
         .AddTypeExtension<MeetingMutations>()
         .AddTypeExtension<MeetingSubscriptions>()
+        .AddType<MeetingType>()
     .AddFiltering()
     .AddSorting()
     .AddProjections()
     .InitializeOnStartup()
-    .AddInMemorySubscriptions()
-    .AddErrorFilter<GraphErrorFilter>();
-
-builder.Services.AddHealthChecks();
+    .AddInMemorySubscriptions();
 
 var app = builder.Build();
-
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
-
-app.UseSerilogRequestLogging().UseRouting();
 
 app.UseRouting();
 
@@ -63,11 +53,6 @@ app.UseWebSockets();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapGraphQL();
-
-    endpoints.MapHealthChecks("/health", new HealthCheckOptions()
-    {
-        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-    }).WithMetadata(new AllowAnonymousAttribute());
 });
 
 try
