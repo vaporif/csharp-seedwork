@@ -1,10 +1,5 @@
 namespace SeedWork.Distributed.Services;
 
-using System.Diagnostics.CodeAnalysis;
-using Common.Infrastructure.BackgroundJobs;
-using Common.Infrastructure.EventBus;
-using Common.Infrastructure.EventBus.Services;
-using MassTransit;
 using Microsoft.Extensions.Logging;
 
 public class RepublishIntegrationEventsJob
@@ -20,7 +15,7 @@ public class RepublishIntegrationEventsJob
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    protected async Task Execute(IJobExecutionContext context)
+    protected async ValueTask RepublishAsync()
     {
         _logger.LogTrace("Running republishing integration events job");
         await _service.RepublishEventsAsync();
