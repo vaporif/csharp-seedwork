@@ -1,7 +1,6 @@
 namespace SeedWork.DDD.Specifications;
 
 using System.Linq.Expressions;
-using D3SK.NetCore.Common.Entities;
 using static System.Linq.Expressions.Expression;
 
 public class AndSpecification<T> : Specification<T>
