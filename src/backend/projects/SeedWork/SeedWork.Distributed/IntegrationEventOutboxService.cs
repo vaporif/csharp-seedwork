@@ -23,7 +23,7 @@ public class IntegrationEventOutboxService<TLogDbStore> : IIntegrationEventOutbo
     {
         // TODO: Using activator to create instance is overkill, simplify it
         _integrationEventLogContext = (TLogDbStore)Activator.CreateInstance(
-            typeof(TLogDbStore), options);
+            typeof(TLogDbStore), options)!;
 
         _integrationTypes = new Lazy<List<Type>>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(c => c.GetTypes())
             .Where(t => t.IsAssignableTo(typeof(IIntegrationEvent)) && !t.IsAbstract)

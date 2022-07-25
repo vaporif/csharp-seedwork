@@ -1,4 +1,3 @@
-namespace SeedWork.OpenId;
 public class AuthSettings
 {
     public string? Issuer { get; set; }
