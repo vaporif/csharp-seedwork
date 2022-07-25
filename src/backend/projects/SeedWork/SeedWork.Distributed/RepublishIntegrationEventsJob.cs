@@ -1,5 +1,3 @@
-namespace SeedWork.Distributed.Services;
-
 using Microsoft.Extensions.Logging;
 
 public class RepublishIntegrationEventsJob

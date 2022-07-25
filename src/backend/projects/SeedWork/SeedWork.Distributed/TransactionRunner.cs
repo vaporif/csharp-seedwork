@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
 
-namespace MS.Common.Infrastructure.Domain;
-
 public class CommandRunnerWithEvents<TContext>
     where TContext : DbContext
 {

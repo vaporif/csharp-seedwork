@@ -3,8 +3,6 @@ using Polly;
 using Polly.Extensions.Http;
 using Polly.Timeout;
 
-namespace SeedWork.Distributed;
-
 public static class ResilientSyncCommunication
 {
     public static IAsyncPolicy<HttpResponseMessage> WaitAndRetry(int retryCount = 5) =>
