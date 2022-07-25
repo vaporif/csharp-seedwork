@@ -1,6 +1,6 @@
 namespace SeedWork.DDD;
 
-public class SoftDeleteEntity :  ISoftDeleteEntity
+public class SoftDeleteEntity :  ISoftDeleteEntity, IAuditEntity
 {
     public bool IsDeleted { get; private set; }
 
