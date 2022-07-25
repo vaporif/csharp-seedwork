@@ -1,4 +1,2 @@
 namespace SeedWork.DDD;
-public struct DomainEvent
-{
-}
+public record DomainEvent { }
