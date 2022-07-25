@@ -26,7 +26,13 @@ public class AggregateRoot : ISoftDeleteEntity, IAuditEntity
         }
     }
 
-    public void ClearEvents() => _events.Clear();
+    public void ClearDomainEvents()
+    {
+        if(_events.Any())
+        {
+            _events.Clear();
+        }
+    } 
 
     public void SetDeleted(bool isDeleted = true) => IsDeleted = isDeleted;
 
