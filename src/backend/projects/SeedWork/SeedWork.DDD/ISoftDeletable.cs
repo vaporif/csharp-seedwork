@@ -1,11 +1,8 @@
-using System;
+namespace SeedWork.DDD;
 
-namespace SeedWork.DDD
+public interface ISoftDeleteEntity
 {
-    public interface ISoftDeleteEntity
-    {
-        bool IsDeleted { get; }
+    bool IsDeleted { get; }
 
-        void SetDeleted(bool isDeleted = true);
-    }
+    void SetDeleted(bool isDeleted = true);
 }

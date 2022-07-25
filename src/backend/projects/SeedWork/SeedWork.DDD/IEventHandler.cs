@@ -3,7 +3,7 @@ using System;
 namespace SeedWork.DDD
 {
     public interface IEventHandler<TEvent>
-        where TEvent : IDomainEvent
+        where TEvent : DomainEvent
     {
         ValueTask HandleAsync(TEvent @event, CancellationToken ct = default);
     }
