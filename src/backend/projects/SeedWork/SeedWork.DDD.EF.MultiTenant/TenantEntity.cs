@@ -1,6 +1,5 @@
 using System;
 
-namespace SeedWork.DDD.EF.MultiTenant;
 public class DeletableTenantEntity : SoftDeleteEntity, ITenantEntity
 {
     public Guid TenantId { get; private set; }

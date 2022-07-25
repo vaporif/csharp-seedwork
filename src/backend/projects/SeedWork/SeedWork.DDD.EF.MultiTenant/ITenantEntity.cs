@@ -1,6 +1,5 @@
 using System;
 
-namespace SeedWork.DDD.EF.MultiTenant;
 public interface ITenantEntity
 {
     Guid TenantId { get; }

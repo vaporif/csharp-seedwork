@@ -1,8 +1,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 
-namespace SeedWork.DDD.EF.MultiTenant;
-
 public static class ContextExtensions
 {
     public static void SetTenantIdForEntities(this DbContext context, Guid tenantId)

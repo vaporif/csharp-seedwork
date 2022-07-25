@@ -1,7 +1,6 @@
 using System;
 using SeedWork.DDD;
 
-namespace SeedWork.DDD.EF.MultiTenant;
 public class TenantAggregateRoot : AggregateRoot, ITenantEntity
 {
     public Guid TenantId { get; private set; }
