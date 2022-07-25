@@ -1,40 +1,25 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 
-public static class ContextExtensions
+public static class TenantBoundedContextExtensions
 {
     public static void SetTenantIdForEntities(this DbContext context, Guid tenantId)
     {
-        SetForEntities();
-        SetForNullableEntities();
+        var entities = context.ChangeTracker
+            .Entries()
+            .Where(x => x.State is EntityState.Added or EntityState.Modified)
+            .ToArray();
 
-        void SetForEntities()
+        foreach (var entity in entities)
         {
-            var entities = context.ChangeTracker.Entries().Where(x => x.State is EntityState.Added or EntityState.Modified)
-                .Select(x => x.Entity).OfType<ITenantEntity>().ToArray();
-
-            for (int i = 0; i < entities.Length; i++)
+            if (entity is ITenantEntity tenantEntity && !tenantEntity.HasTenantId)
             {
-                var entity = entities[i];
-                if (entity.HasTenantId)
-                {
-                    entity.SetTenantId(tenantId);
-                }
+                tenantEntity.SetTenantId(tenantId);
             }
-        }
 
-        void SetForNullableEntities()
-        {
-            var entities = context.ChangeTracker.Entries().Where(x => x.State is EntityState.Added or EntityState.Modified)
-                .Select(x => x.Entity).OfType<INullableTenantEntity>().ToArray();
-
-            for (int i = 0; i < entities.Length; i++)
+            if (entity is INullableTenantEntity nullTenantEntity && !nullTenantEntity.HasTenantId)
             {
-                var entity = entities[i];
-                if (entity.HasTenantId)
-                {
-                    entity.SetTenantId(tenantId);
-                }
+                nullTenantEntity.SetTenantId(tenantId);
             }
         }
     }
