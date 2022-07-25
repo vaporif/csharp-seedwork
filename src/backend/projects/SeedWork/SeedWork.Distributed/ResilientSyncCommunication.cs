@@ -8,10 +8,10 @@ namespace SeedWork.Distributed;
 public static class ResilientSyncCommunication
 {
     public static IAsyncPolicy<HttpResponseMessage> WaitAndRetry(int retryCount = 5) =>
-                HttpPolicyExtensions
-                    .HandleTransientHttpError()
-                    .Or<TimeoutRejectedException>()
-                    .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+        HttpPolicyExtensions
+            .HandleTransientHttpError()
+            .Or<TimeoutRejectedException>()
+            .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
     public static IAsyncPolicy<HttpResponseMessage> Timeout(int seconds = 10) =>
         Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(seconds));
