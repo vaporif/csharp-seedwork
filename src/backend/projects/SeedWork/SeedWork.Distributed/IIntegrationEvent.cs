@@ -1,6 +1,6 @@
 using System;
 
-namespace SeedWork.Multiservice;
+namespace SeedWork.Distributed;
 
 public interface IIntegrationEvent
 {

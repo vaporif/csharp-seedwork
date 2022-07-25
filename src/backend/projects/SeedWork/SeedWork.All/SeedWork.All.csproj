@@ -10,8 +10,11 @@
   <ItemGroup>
     <ProjectReference Include="..\SeedWork.DDD\SeedWork.DDD.csproj" />
     <ProjectReference Include="..\SeedWork.DDD.EF\SeedWork.DDD.EF.csproj" />
-    <ProjectReference Include="..\SeedWork.Multiservice\SeedWork.Multiservice.csproj" />
-    <ProjectReference Include="..\SeedWork.Multiservice.AWS\SeedWork.Multiservice.AWS.csproj" />
+    <ProjectReference Include="..\SeedWork.DDD.MultiTenant\SeedWork.DDD.MultiTenant.csproj" />
+    <ProjectReference Include="..\SeedWork.Distributed\SeedWork.Distributed.csproj" />
+    <ProjectReference Include="..\SeedWork.Distributed.AWS\SeedWork.Distributed.AWS.csproj" />
+    <ProjectReference Include="..\SeedWork.Persistence\SeedWork.Persistence.csproj" />
+    <ProjectReference Include="..\SeedWork.MultiTenant\SeedWork.MultiTenant.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,7 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SeedWork.Multiservice\SeedWork.Multiservice.csproj" />
+    <ProjectReference Include="..\SeedWork.Distributed\SeedWork.Distributed.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MassTransit.AmazonSQS" Version="8.0.5" />
+  </ItemGroup>
+  
 </Project>

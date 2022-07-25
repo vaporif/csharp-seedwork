@@ -1,4 +1,4 @@
-namespace SeedWork.Multiservice.Services;
+namespace SeedWork.Distributed;
 
 using MassTransit;
 
