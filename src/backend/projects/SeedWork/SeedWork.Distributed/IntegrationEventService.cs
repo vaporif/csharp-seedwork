@@ -1,15 +1,13 @@
-namespace SeedWork.Distributed.Services;
-
-using System;
+global using System;
+global using MassTransit;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Logging;
+global using System.Threading;
+global using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
-using MassTransit;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 public class IntegrationEventService<TContext> : IIntegrationEventService

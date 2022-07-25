@@ -1,7 +1,4 @@
-namespace SeedWork.Distributed;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Storage;
 
 public interface IIntegrationEventOutboxService

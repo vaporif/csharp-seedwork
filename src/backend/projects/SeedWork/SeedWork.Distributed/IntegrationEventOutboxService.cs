@@ -9,8 +9,6 @@ using LinqToDB.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace SeedWork.Distributed.Services;
-
 public class IntegrationEventOutboxService<TLogDbStore> : IIntegrationEventOutboxService, IDisposable
     where TLogDbStore : IntegrationEventLogDbContext
 {

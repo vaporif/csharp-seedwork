@@ -1,6 +1,3 @@
-namespace SeedWork.Distributed;
-using System;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 public abstract class IntegrationEventLogDbContext : DbContext
