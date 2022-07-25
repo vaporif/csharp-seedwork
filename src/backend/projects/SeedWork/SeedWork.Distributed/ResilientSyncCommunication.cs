@@ -17,6 +17,6 @@ public static class ResilientSyncCommunication
         Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(seconds));
 
     public static IAsyncPolicy<HttpResponseMessage> CircuitBreaker(int seconds = 30) => HttpPolicyExtensions
-            .HandleTransientHttpError()
-            .CircuitBreakerAsync(5, TimeSpan.FromSeconds(seconds));
+        .HandleTransientHttpError()
+        .CircuitBreakerAsync(5, TimeSpan.FromSeconds(seconds));
 }
