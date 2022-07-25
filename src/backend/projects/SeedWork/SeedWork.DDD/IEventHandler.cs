@@ -1,5 +1,3 @@
-namespace SeedWork.DDD;
-
 public interface IDomainEventHandler<TDomainEvent>
     where TDomainEvent : DomainEvent
 {

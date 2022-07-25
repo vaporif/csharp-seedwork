@@ -1,6 +1,5 @@
 using System;
 
-namespace SeedWork.DDD;
 
 public interface IAuditEntity
 {

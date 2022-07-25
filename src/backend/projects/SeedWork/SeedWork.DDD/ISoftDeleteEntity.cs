@@ -1,5 +1,3 @@
-namespace SeedWork.DDD;
-
 public interface ISoftDeleteEntity
 {
     bool IsDeleted { get; }

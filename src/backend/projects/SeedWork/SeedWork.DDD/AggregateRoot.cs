@@ -1,7 +1,5 @@
 using System.Collections.ObjectModel;
 
-namespace SeedWork.DDD;
-
 public class AggregateRoot : ISoftDeleteEntity, IAuditEntity
 {
     private List<DomainEvent> _events = new List<DomainEvent>();

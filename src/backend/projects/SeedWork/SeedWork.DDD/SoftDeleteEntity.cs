@@ -1,5 +1,3 @@
-namespace SeedWork.DDD;
-
 public class SoftDeleteEntity :  ISoftDeleteEntity, IAuditEntity
 {
     public int CreatedByUser { get; private set; }

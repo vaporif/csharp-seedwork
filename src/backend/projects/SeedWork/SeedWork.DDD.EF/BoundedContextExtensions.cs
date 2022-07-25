@@ -6,7 +6,6 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.ChangeTracking;
 global using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace SeedWork.DDD.EF;
 
 public static class ContextExtensions
 {
@@ -90,11 +89,10 @@ public static class ContextExtensions
 
                 rowsCount += await saveChangesAsync(ct);
 
-                var entries = context
+                entries = context
                     .ChangeTracker
                     .Entries()
-                    .OfType<AggregateRoot>()
-                    .Where(t => t.DomainEvents.Any())
+                    .Where(f => f.Entity is AggregateRoot a && a.DomainEvents.Any())
                     .ToArray();
             }
         } while (entries.Any());

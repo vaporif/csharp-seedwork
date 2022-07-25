@@ -3,8 +3,6 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SeedWork.DDD;
-
 // NOTE: This class is used by the framework to dispatch events. Is a service locator.
 public sealed class DomainEventDispatcher : IEventDispatcher
 {

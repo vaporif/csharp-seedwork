@@ -1,5 +1,3 @@
-namespace SeedWork.DDD;
-
 public delegate object ServiceFactory(Type serviceType);
 
 public static class ServiceFactoryExtensions
