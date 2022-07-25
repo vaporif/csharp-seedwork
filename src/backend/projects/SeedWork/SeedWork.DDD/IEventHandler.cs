@@ -1,10 +1,7 @@
-using System;
+namespace SeedWork.DDD;
 
-namespace SeedWork.DDD
+public interface IDomainEventHandler<TDomainEvent>
+    where TDomainEvent : DomainEvent
 {
-    public interface IEventHandler<TEvent>
-        where TEvent : DomainEvent
-    {
-        ValueTask HandleAsync(TEvent @event, CancellationToken ct = default);
-    }
+    ValueTask HandleAsync(TDomainEvent @event, CancellationToken ct = default);
 }

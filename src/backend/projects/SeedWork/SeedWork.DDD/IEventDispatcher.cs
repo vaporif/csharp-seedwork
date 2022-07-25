@@ -1,9 +1,5 @@
-using System;
-
-namespace SeedWork.DDD
+namespace SeedWork.DDD;
+public interface IEventDispatcher
 {
-    public interface IEventDispatcher
-    {
-        ValueTask DispatchAsync(DomainEvent @event, CancellationToken ct = default);
-    }
+    ValueTask DispatchAsync(DomainEvent @event, CancellationToken ct = default);
 }
