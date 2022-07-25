@@ -9,6 +9,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SeedWork.DDD\SeedWork.DDD.csproj" />
+    <ProjectReference Include="..\SeedWork.DDD.EF\SeedWork.DDD.EF.csproj" />
+    <ProjectReference Include="..\SeedWork.Multiservice\SeedWork.Multiservice.csproj" />
+    <ProjectReference Include="..\SeedWork.Multiservice.AWS\SeedWork.Multiservice.AWS.csproj" />
   </ItemGroup>
 
 </Project>
