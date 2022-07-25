@@ -1,4 +1,4 @@
-using System;
+using System.Collections.ObjectModel;
 
 namespace SeedWork.DDD;
 
@@ -6,7 +6,7 @@ public class AggregateRoot : ISoftDeleteEntity
 {
     private List<DomainEvent> _events = new List<DomainEvent>();
 
-    public bool IsDeleted { get; }
+    public bool IsDeleted { get; private set; }
 
     public ReadOnlyCollection<DomainEvent> DomainEvents => _events.AsReadOnly();
 
