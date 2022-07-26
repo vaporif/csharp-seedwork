@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 
 // NOTE: This class is used by the framework to dispatch events. Is a service locator.
 public sealed class DomainEventDispatcher : IDomainEventDispatcher
