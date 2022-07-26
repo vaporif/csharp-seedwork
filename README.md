@@ -12,8 +12,8 @@ Currently there's one simple example showing monolithic app with GraphQl HotChoc
 As this is a cutout refactoring of existing project in production it's currently under construction.
 
 TODO:
-Add Microservice example
-Add Custom OpenId Provider via OpenIdDict
-Add EventSourcing project to SeedWork
-Testing
-Nuget publish
+1.Add Microservice example
+1.Add Custom OpenId Provider via OpenIdDict
+1.Add EventSourcing project to SeedWork
+1.Testing
+1.Nuget publish
