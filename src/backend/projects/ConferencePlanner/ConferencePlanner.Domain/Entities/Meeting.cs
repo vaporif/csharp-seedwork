@@ -1,13 +1,27 @@
 namespace ConferencePlanner.Domain.Entities
 {
-    public class Meeting
+    public class Meeting : AggregateRoot
     {
-        public int Id {get;set;}
+        private Meeting()
+        {
+        }
 
-        public string? Name {get;set;}
+        public Meeting(string title)
+        {
+            Name = title;
+        }
 
-        public MeetingOrganizer? Organizer {get;set;}
+        public int Id { get; private set; }
 
-        public List<Participiant> Participiants {get;set;} = new List<Participiant>();
+        public string? Name { get; private set; }
+
+        public MeetingOrganizer? Organizer { get; private set; }
+
+        public List<Participiant> Participiants { get; private set; } = new List<Participiant>();
+
+        public void SetOrganizer(string firstName, string lastName)
+        {
+            Organizer = new MeetingOrganizer(firstName, lastName);
+        }
     }
 }

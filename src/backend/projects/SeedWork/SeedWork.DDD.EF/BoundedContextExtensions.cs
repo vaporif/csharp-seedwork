@@ -1,17 +1,13 @@
 global using System;
 global using System.Linq;
 global using NodaTime;
-global using SeedWork.DDD;
 global using Microsoft.EntityFrameworkCore;
-global using Microsoft.EntityFrameworkCore.ChangeTracking;
-global using Microsoft.EntityFrameworkCore.Metadata;
 
-
-public static class ContextExtensions
+public static class BoundedContextExtensions
 {
     public static async ValueTask<SaveOperationResult> BoundedContextSaveChangesAsync(
         this DbContext context,
-        IEventDispatcher eventDispatcher,
+        IDomainEventDispatcher eventDispatcher,
         IClock clock,
         int userId,
         Func<CancellationToken, ValueTask<int>> saveChangesAsync,
@@ -94,6 +90,6 @@ public static class ContextExtensions
             }
         } while (entries.Any());
 
-        return new SaveOperationResult(rowsCount, addedEntities, updatedEntities);
+        return new SaveOperationResult(rowsCount, addedEntities.ToList(), updatedEntities.ToList());
     }
 }

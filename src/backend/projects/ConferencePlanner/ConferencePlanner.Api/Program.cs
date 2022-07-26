@@ -12,6 +12,10 @@ using Microsoft.AspNetCore.Authorization;
 using HealthChecks.UI.Client;
 using Bogus;
 using ConferencePlanner.Api.Meetings;
+using ConferencePlanner.Application.Meetings;
+using ConferencePlanner.Infrastructure.Meetings;
+using Microsoft.AspNetCore.Builder;
+using Prometheus;
 
 Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
@@ -25,12 +29,13 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                 .Enrich.FromLogContext()
                 .WriteTo.Console());
 
-builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(
+builder.Services.AddDbContextFactory<ApplicationDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("AppDb")));
 
 builder.Services
     .AddGraphQLServer()
-    .RegisterDbContext<ApplicationDbContext>(DbContextKind.Pooled)
+    .RegisterDbContext<ApplicationDbContext>(DbContextKind.Synchronized)
+    .RegisterService<AddMeetingCommand>()
     .AddQueryType()
     .AddMutationType()
     .AddSubscriptionType()
@@ -38,20 +43,35 @@ builder.Services
         .AddTypeExtension<MeetingMutations>()
         .AddTypeExtension<MeetingSubscriptions>()
         .AddType<MeetingType>()
+    .AddDefaultTransactionScopeHandler()
     .AddFiltering()
     .AddSorting()
     .AddProjections()
     .InitializeOnStartup()
     .AddInMemorySubscriptions();
 
+builder.Services.AddDomainEventsDispatcher();
+builder.Services.AddScoped<IMeetingsRepository, MeetingsRepository>();
+builder.Services.AddScoped<AddMeetingCommand>();
+
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ApplicationDbContext>("database")
+    .ForwardToPrometheus();
+    
+
 var app = builder.Build();
 
 app.UseRouting();
+app.UseHttpMetrics();
 
 app.UseWebSockets();
 
 app.UseEndpoints(endpoints =>
 {
+    endpoints.MapHealthChecks("/health", new HealthCheckOptions
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
     endpoints.MapGraphQL();
 });
 
@@ -65,7 +85,7 @@ try
 
         if (await dbContext.Database.EnsureCreatedAsync())
         {
-            if(!dbContext.Meetings.Any())
+            if (!dbContext.Meetings.Any())
             {
                 Log.Information("generating fake data");
                 var fakerPart = new Faker<Participiant>()
@@ -74,7 +94,7 @@ try
                 var faker = new Faker<Meeting>()
                     .RuleFor(d => d.Id, 0)
                     .RuleFor(d => d.Name, f => f.Company.CatchPhrase())
-                    .RuleFor(d => d.Organizer, f => new MeetingOrganizer{ FirstName = f.Person.FirstName, LastName = f.Person.LastName })
+                    .RuleFor(d => d.Organizer, f => new MeetingOrganizer(f.Person.FirstName, f.Person.LastName))
                     .RuleFor(d => d.Participiants, f => fakerPart.GenerateBetween(2, 20));
 
                 var meetings = faker.Generate(200);

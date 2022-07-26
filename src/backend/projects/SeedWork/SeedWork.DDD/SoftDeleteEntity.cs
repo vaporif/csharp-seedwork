@@ -10,15 +10,15 @@ public class SoftDeleteEntity :  ISoftDeleteEntity, IAuditEntity
 
     public bool IsDeleted { get; private set; }
 
-    public void SetDeleted(bool isDeleted = true) => IsDeleted = isDeleted;
+    public virtual void SetDeleted(bool isDeleted = true) => IsDeleted = isDeleted;
 
-    public void OnAdded(Instant createdDate, int createdByUser)
+    public virtual void OnAdded(Instant createdDate, int createdByUser)
     {
         CreatedDate = createdDate;
         CreatedByUser = createdByUser;
     }
 
-    public void OnUpdated(Instant lastModifiedDate, int lastModifiedByUser)
+    public virtual void OnUpdated(Instant lastModifiedDate, int lastModifiedByUser)
     {
         LastModifiedByUser = lastModifiedByUser;
         LastModifiedDate = lastModifiedDate;

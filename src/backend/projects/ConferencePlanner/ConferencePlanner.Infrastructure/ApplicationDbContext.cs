@@ -1,13 +1,21 @@
 using ConferencePlanner.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
 
 namespace ConferencePlanner.Infrastructure
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+        private readonly IDomainEventDispatcher _domainEventDispatcher;
+        private readonly IClock _clock;
+
+        public ApplicationDbContext(
+            DbContextOptions<ApplicationDbContext> options, 
+            IDomainEventDispatcher domainEventDispatcher,
+            IClock? clock = null) : base(options)
         {
+            _domainEventDispatcher = domainEventDispatcher ?? throw new ArgumentNullException(nameof(domainEventDispatcher));
+            _clock = clock ?? SystemClock.Instance;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,5 +45,17 @@ namespace ConferencePlanner.Infrastructure
         public DbSet<Speaker> Speakers { get; set; } = default!;
 
         public DbSet<Attendee> Attendees { get; set; } = default!;
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var result = await this.BoundedContextSaveChangesAsync(
+                _domainEventDispatcher, 
+                _clock,
+                0, 
+                async (ct) => await base.SaveChangesAsync(ct), 
+                cancellationToken);
+
+            return result.AffectedRows;
+        }
     }
 }

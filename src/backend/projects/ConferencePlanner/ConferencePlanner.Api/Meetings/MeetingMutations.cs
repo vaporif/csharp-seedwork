@@ -1,3 +1,4 @@
+using ConferencePlanner.Application.Meetings;
 using HotChocolate.Subscriptions;
 
 namespace ConferencePlanner.Api.Meetings
@@ -7,17 +8,15 @@ namespace ConferencePlanner.Api.Meetings
     {
         public async Task<AddMeetingPayload> AddMeetingAsync(
             AddMeetingInput input,
-            ApplicationDbContext context,
             CancellationToken cancellationToken,
-            [Service]ITopicEventSender eventSender)
+            [Service] AddMeetingCommand command,
+            [Service] ITopicEventSender eventSender)
         {
-            var meeting = new Meeting { Name = input.Name };
-            context.Add(meeting);
-            await context.SaveChangesAsync(cancellationToken);
+            await command.HandleAsync(input, cancellationToken);
             await eventSender.SendAsync(
                 nameof(MeetingSubscriptions.OnMeetingAdded),
-                meeting);
-            return new AddMeetingPayload(meeting);
+                command.Payload!.Meeting);
+            return command.Payload!;
         }
     }
 }

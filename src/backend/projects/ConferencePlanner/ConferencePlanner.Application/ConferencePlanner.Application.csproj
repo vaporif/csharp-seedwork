@@ -4,11 +4,10 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-    <PackageReference Include="NodaTime" Version="3.1.0" />
+    <ProjectReference Include="..\ConferencePlanner.Domain\ConferencePlanner.Domain.csproj" />
   </ItemGroup>
+
 </Project>

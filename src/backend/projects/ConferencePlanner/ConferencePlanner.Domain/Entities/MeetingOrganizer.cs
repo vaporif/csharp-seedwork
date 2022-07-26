@@ -1,11 +1,21 @@
 namespace ConferencePlanner.Domain.Entities
 {
-    public class MeetingOrganizer
+    public class MeetingOrganizer : SoftDeleteEntity
     {
-        public int Id {get;set;}
+        private MeetingOrganizer()
+        {
+        }
 
-        public string? FirstName {get;set;}
+        public MeetingOrganizer(string firstName, string lastName)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+        }
+        
+        public int Id { get; private set; }
 
-        public string? LastName {get;set;}
+        public string? FirstName { get; private set; }
+
+        public string? LastName { get; private set; }
     }
 }

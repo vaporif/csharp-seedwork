@@ -1,8 +1,6 @@
-public interface IIntegrationEventService
+public interface IIntegrationEventService : IPublishIntegarationEventsService
 {
     Task PublishEventsThroughEventBusAsync(Guid transactionId);
-
-    Task RepublishEventsAsync();
 
     Task AddAndSaveEventAsync(IIntegrationEvent evt);
 

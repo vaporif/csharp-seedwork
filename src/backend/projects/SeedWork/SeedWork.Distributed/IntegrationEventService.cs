@@ -69,7 +69,7 @@ public class IntegrationEventService<TContext> : IIntegrationEventService
         await _outboxService.BulkInsertEventsAsync(evt, _context.Database.CurrentTransaction);
     }
 
-    public async Task RepublishEventsAsync()
+    public async ValueTask PulishEventsAsync()
     {
         var lastCreated = TimeSpan.FromMinutes(LastCreatedEventsInMinutes);
         var beforeCreatedAt = DateTimeOffset.UtcNow.Subtract(lastCreated);
