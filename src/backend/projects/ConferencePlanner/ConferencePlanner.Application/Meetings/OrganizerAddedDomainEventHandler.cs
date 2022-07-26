@@ -1,6 +1,6 @@
 using ConferencePlanner.Domain.Entities;
 namespace ConferencePlanner.Application.Meetings;
-public class OrganizerAddedDomainEventHandler : MediatR.INotificationHandler<OrganizerAddedDomainEvent>
+public class OrganizerAddedDomainEventHandler : IDomainEventHandler<OrganizerAddedDomainEvent>
 {
     private readonly IMeetingsRepository _repo;
 
