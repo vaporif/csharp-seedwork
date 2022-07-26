@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/ConferencePlanner/ConferencePlanner.Api/bin/Debug/net6.0/ConferencePlanner.Api.dll",
+            "program": "${workspaceFolder}/src/examples/graphql-ddd-monolith/ConferencePlanner/ConferencePlanner.Api/bin/Debug/net6.0/ConferencePlanner.Api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/ConferencePlanner/ConferencePlanner.Api",
+            "cwd": "${workspaceFolder}/src/examples/graphql-ddd-monolith/ConferencePlanner/ConferencePlanner.Api",
             "stopAtEntry": false,
             "justMyCode": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser

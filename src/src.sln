@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{FAC2AC11-11D4-49E9-B29C-4B83810DB6E7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "graphql-ddd-monolith", "graphql-ddd-monolith", "{E8E8BB38-FA21-401C-A8AC-08C09A985C8F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConferencePlanner", "ConferencePlanner", "{30919BBA-7DD2-479B-81B7-4E968A0F9128}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConferencePlanner.Api", "examples\graphql-ddd-monolith\ConferencePlanner\ConferencePlanner.Api\ConferencePlanner.Api.csproj", "{9B616CC1-22D1-4FFE-A4D7-5A214547FDF1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9B616CC1-22D1-4FFE-A4D7-5A214547FDF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B616CC1-22D1-4FFE-A4D7-5A214547FDF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B616CC1-22D1-4FFE-A4D7-5A214547FDF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B616CC1-22D1-4FFE-A4D7-5A214547FDF1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E8E8BB38-FA21-401C-A8AC-08C09A985C8F} = {FAC2AC11-11D4-49E9-B29C-4B83810DB6E7}
+		{30919BBA-7DD2-479B-81B7-4E968A0F9128} = {E8E8BB38-FA21-401C-A8AC-08C09A985C8F}
+		{9B616CC1-22D1-4FFE-A4D7-5A214547FDF1} = {30919BBA-7DD2-479B-81B7-4E968A0F9128}
+	EndGlobalSection
+EndGlobal

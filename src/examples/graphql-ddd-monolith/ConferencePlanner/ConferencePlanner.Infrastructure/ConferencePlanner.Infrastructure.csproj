@@ -13,6 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ConferencePlanner.Application\ConferencePlanner.Application.csproj" />
-    <ProjectReference Include="..\..\SeedWork\SeedWork.DDD.EF\SeedWork.DDD.EF.csproj" />
+    <ProjectReference Include="..\..\..\..\SeedWork\SeedWork.DDD.EF\SeedWork.DDD.EF.csproj" />
   </ItemGroup>
 </Project>
