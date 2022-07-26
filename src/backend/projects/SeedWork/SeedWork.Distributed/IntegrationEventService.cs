@@ -45,12 +45,12 @@ public class IntegrationEventService<TContext> : IIntegrationEventService
             "----- Enqueuing integration event {IntegrationEventId} to repository ({@IntegrationEvent})", evt.EventId,
             evt);
 
-        if (_context.CurrentTransaction == null)
+        if (_context.Database.CurrentTransaction == null)
         {
             throw new InvalidOperationException("transaction is required");
         }
 
-        await _outboxService.AddEventAsync(evt, _context.CurrentTransaction.GetTransaction());
+        await _outboxService.AddEventAsync(evt, _context.Database.CurrentTransaction);
     }
 
     public async Task BulkInsertAndSaveAsync(IList<IIntegrationEvent> evt)
@@ -59,12 +59,12 @@ public class IntegrationEventService<TContext> : IIntegrationEventService
             "----- Enqueuing integration events {IntegrationEventId} to repository ({@IntegrationEvent})",
             string.Join(',', evt.Select(x => x.EventId)), evt);
 
-        if (_context.CurrentTransaction == null)
+        if (_context.Database.CurrentTransaction == null)
         {
             throw new InvalidOperationException("transaction is required");
         }
 
-        await _outboxService.BulkInsertEventsAsync(evt, _context.CurrentTransaction.GetTransaction());
+        await _outboxService.BulkInsertEventsAsync(evt, _context.Database.CurrentTransaction);
     }
 
     public async Task RepublishEventsAsync()
@@ -90,7 +90,7 @@ public class IntegrationEventService<TContext> : IIntegrationEventService
         foreach (var group in groups)
         {
             _logger.LogTrace("Publishing events: {@ids}", group.Ids);
-            await PublishEventsInternal(group.Ids, group.Events, group.Type);
+            await PublishEventsInternal(group.Ids, group.Events!, group.Type!);
         }
     }
 

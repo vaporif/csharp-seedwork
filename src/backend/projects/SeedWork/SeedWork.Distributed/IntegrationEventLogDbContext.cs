@@ -3,9 +3,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 public abstract class IntegrationEventLogDbContext : DbContext
 {
     public IntegrationEventLogDbContext(DbContextOptions options) : base(options) 
-        => options = options ?? throw new ArgumentNullException(nameof(options));
+    {
+    }
 
-    public DbSet<IntegrationEventLogEntry> IntegrationEventLogs { get; set; }
+    public DbSet<IntegrationEventLogEntry> IntegrationEventLogs { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

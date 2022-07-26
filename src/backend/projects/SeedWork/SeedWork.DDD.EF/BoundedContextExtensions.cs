@@ -27,8 +27,8 @@ public static class ContextExtensions
             throw new ArgumentNullException(nameof(clock));
         }
 
-        var addedEntities = new List<IAuditEntity>();
-        var updatedEntities = new List<IAuditEntity>();
+        var addedEntities = new HashSet<IAuditEntity>();
+        var updatedEntities = new HashSet<IAuditEntity>();
 
         var rowsCount = 0;
 
@@ -55,7 +55,7 @@ public static class ContextExtensions
                             }
                             break;
                         case EntityState.Modified:
-                            if(!updatedEntities.Contains(auditEntity))
+                            if (!updatedEntities.Contains(auditEntity))
                             {
                                 auditEntity.OnUpdated(clock.GetCurrentInstant(), userId);
                                 updatedEntities.Add(auditEntity);
@@ -70,11 +70,6 @@ public static class ContextExtensions
                 {
                     context.Entry(entry).State = EntityState.Modified;
                     softDeleteEntity.SetDeleted(true);
-                }
-
-                if (entry.Entity is IOnSavingEntityBehavior onSavingEntityBehavior)
-                {
-                    onSavingEntityBehavior.OnSaving(entry.State);
                 }
 
                 if (entry.Entity is AggregateRoot aggregateRoot)
@@ -92,7 +87,9 @@ public static class ContextExtensions
                 entries = context
                     .ChangeTracker
                     .Entries()
-                    .Where(f => f.Entity is AggregateRoot a && a.DomainEvents.Any())
+                    .Where(f => 
+                        (f.Entity is AggregateRoot a && a.DomainEvents.Any()) || 
+                        (entry.State != EntityState.Detached && entry.State == EntityState.Unchanged))
                     .ToArray();
             }
         } while (entries.Any());

@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ConferencePlanner.Infrastructure\ConferencePlanner.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\SeedWork\SeedWork.csproj" />
   </ItemGroup>
 
 </Project>

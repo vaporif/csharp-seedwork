@@ -54,7 +54,7 @@ public class IntegrationEventOutboxService<TLogDbStore> : IIntegrationEventOutbo
             .OrderBy(e => e.CreationTime)
             .ToListAsyncEF();
 
-        return events.Select(e => e.DeserializeJsonContent(_integrationTypes.Value.Find(t => t.Name == e.EventTypeShortName)));
+        return events.Select(e => e.DeserializeJsonContent(_integrationTypes.Value.Find(t => t.Name == e.EventTypeShortName)!));
     }
 
     public async Task AddEventAsync(IIntegrationEvent @event, IDbContextTransaction transaction)
