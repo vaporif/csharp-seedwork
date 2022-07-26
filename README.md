@@ -9,6 +9,8 @@ Integration Events are dispatched via MassTransit with Outbox pattern ensuring e
 
 Currently there's one simple example showing monolithic app with GraphQl as Api layer.
 
+As this is a cutout refactoring of existing project in production it's currently under construction.
+
 TODO:
 Add Microservice example
 Add Custom OpenId Provider via OpenIdDict
