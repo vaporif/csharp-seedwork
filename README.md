@@ -15,3 +15,5 @@ TODO:
 Add Microservice example
 Add Custom OpenId Provider via OpenIdDict
 Add EventSourcing project to SeedWork
+Testing
+Nuget publish
