@@ -1,14 +1,14 @@
 public class SoftDeleteEntity :  ISoftDeleteEntity, IAuditEntity
 {
-    public int CreatedByUser { get; private set; }
+    public int CreatedByUser { get; set; }
 
-    public DateTimeOffset CreatedDate { get; private set; }
+    public DateTimeOffset CreatedDate { get; set; }
 
-    public int LastModifiedByUser { get; private set; }
+    public int LastModifiedByUser { get; set; }
 
-    public DateTimeOffset LastModifiedDate { get; private set; }
+    public DateTimeOffset LastModifiedDate { get; set; }
 
-    public bool IsDeleted { get; private set; }
+    public bool IsDeleted { get; set; }
 
     public virtual void SetDeleted(bool isDeleted = true) => IsDeleted = isDeleted;
 

@@ -33,7 +33,7 @@ public static class BoundedContextExtensions
         {
             foreach (var entry in entries)
             {
-                if (entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
+                if (entry.State == EntityState.Detached)
                 {
                     continue;
                 }
@@ -78,15 +78,15 @@ public static class BoundedContextExtensions
                 }
 
                 rowsCount += await saveChangesAsync(ct);
-
-                entries = context
-                    .ChangeTracker
-                    .Entries()
-                    .Where(f => 
-                        (f.Entity is AggregateRoot a && a.DomainEvents.Any()) || 
-                        (entry.State != EntityState.Detached && entry.State == EntityState.Unchanged))
-                    .ToArray();
             }
+            
+            entries = context
+                .ChangeTracker
+                .Entries()
+                .Where(f =>
+                    (f.Entity is AggregateRoot a && a.DomainEvents.Any()) ||
+                    (f.State != EntityState.Detached && f.State == EntityState.Unchanged))
+                .ToArray();
         } while (entries.Any());
 
         return new SaveOperationResult(rowsCount, addedEntities.ToList(), updatedEntities.ToList());

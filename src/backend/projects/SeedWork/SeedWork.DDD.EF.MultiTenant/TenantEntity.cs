@@ -2,7 +2,7 @@ using System;
 
 public class DeletableTenantEntity : SoftDeleteEntity, ITenantEntity
 {
-    public Guid TenantId { get; private set; }
+    public Guid TenantId { get; set; }
 
     public bool HasTenantId => TenantId != default;
 

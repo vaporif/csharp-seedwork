@@ -29,7 +29,7 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
 builder.Services.AddDbContextFactory<ApplicationDbContext>(
     options =>
     {
-        options.UseNpgsql(builder.Configuration.GetConnectionString("AppDb"), o => o.UseNodaTime().EnableRetryOnFailure());
+        options.UseNpgsql(builder.Configuration.GetConnectionString("AppDb"), o => o.UseNodaTime());
 
         if (!builder.Environment.IsProduction())
         {
@@ -56,6 +56,7 @@ builder.Services
 builder.Services.AddMediatR(typeof(Program).GetTypeInfo().Assembly);
 builder.Services.AddScoped<IMeetingsRepository, MeetingsRepository>();
 builder.Services.AddScoped<AddMeetingCommand>();
+builder.Services.AddScoped<UpdateMeetingCommand>();
 builder.Services.AddSingleton<IClock, SystemClock>();
 
 builder.Services.AddHealthChecks()

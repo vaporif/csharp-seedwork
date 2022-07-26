@@ -12,10 +12,10 @@ namespace ConferencePlanner.Domain.Entities
             LastName = lastName;
         }
         
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
-        public string? FirstName { get; private set; }
+        public string? FirstName { get; set; }
 
-        public string? LastName { get; private set; }
+        public string? LastName { get; set; }
     }
 }

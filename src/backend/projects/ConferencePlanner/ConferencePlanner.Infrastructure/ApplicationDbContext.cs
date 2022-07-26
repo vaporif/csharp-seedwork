@@ -45,16 +45,16 @@ namespace ConferencePlanner.Infrastructure
 
         public DbSet<Attendee> Attendees { get; set; } = default!;
 
-        // public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        // {
-        //     var result = await this.BoundedContextSaveChangesAsync(
-        //         _domainEventDispatcher, 
-        //         _clock,
-        //         0, 
-        //         async (ct) => await base.SaveChangesAsync(ct), 
-        //         cancellationToken);
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var result = await this.BoundedContextSaveChangesAsync(
+                _domainEventDispatcher, 
+                _clock,
+                0, 
+                async (ct) => await base.SaveChangesAsync(ct), 
+                cancellationToken);
 
-        //     return result.AffectedRows;
-        // }
+            return result.AffectedRows;
+        }
     }
 }

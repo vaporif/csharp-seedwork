@@ -8,15 +8,15 @@ public class AggregateRoot : ISoftDeleteEntity, IAuditEntity
     [GraphQLIgnore]
     private List<DomainEvent> _events = new List<DomainEvent>();
 
-    public bool IsDeleted { get; private set; }
+    public bool IsDeleted { get; set; }
 
-    public int CreatedByUser { get; private set; }
+    public int CreatedByUser { get; set; }
 
-    public DateTimeOffset CreatedDate { get; private set; }
+    public DateTimeOffset CreatedDate { get; set; }
 
-    public int LastModifiedByUser { get; private set; }
+    public int LastModifiedByUser { get; set; }
 
-    public DateTimeOffset LastModifiedDate { get; private set; }
+    public DateTimeOffset LastModifiedDate { get; set; }
 
     [NotMapped]
     [GraphQLIgnore]

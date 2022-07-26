@@ -18,5 +18,14 @@ namespace ConferencePlanner.Api.Meetings
                 command.Payload!.Meeting);
             return command.Payload!;
         }
+
+        public async Task<AddMeetingPayload> UpdateMeetingAsync(
+            UpdateMeetingInput input,
+            CancellationToken cancellationToken,
+            [Service] UpdateMeetingCommand command)
+        {
+            await command.HandleAsync(input, cancellationToken);
+            return command.Payload!;
+        }
     }
 }
