@@ -53,7 +53,7 @@ builder.Services
     .AddProjections()
     .AddInMemorySubscriptions();
 
-builder.Services.AddMediatR(typeof(Program).GetTypeInfo().Assembly);
+builder.Services.AddMediatR(typeof(OrganizerAddedDomainEventHandler).GetTypeInfo().Assembly);
 builder.Services.AddScoped<IMeetingsRepository, MeetingsRepository>();
 builder.Services.AddScoped<AddMeetingCommand>();
 builder.Services.AddScoped<UpdateMeetingCommand>();

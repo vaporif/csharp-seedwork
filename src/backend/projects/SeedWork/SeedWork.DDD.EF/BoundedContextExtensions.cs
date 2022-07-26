@@ -85,7 +85,7 @@ public static class BoundedContextExtensions
                 .Entries()
                 .Where(f =>
                     (f.Entity is AggregateRoot a && a.DomainEvents.Any()) ||
-                    (f.State != EntityState.Detached && f.State == EntityState.Unchanged))
+                    (f.State != EntityState.Detached && f.State != EntityState.Unchanged))
                 .ToArray();
         } while (entries.Any());
 
