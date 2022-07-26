@@ -15,13 +15,13 @@ public class MeetingsRepository : IMeetingsRepository
     public async ValueTask<Meeting> AddAsync(Meeting entity, CancellationToken ct = default)
     {
         var e = await _context.DbContext.AddAsync(entity, ct);
-        return e.Entity;
+        return e!.Entity!;
     }
 
     public bool Delete(int id)
     {
         var entity = _context.DbContext.Meetings.Find(id);
-        if (entity == null)
+        if (entity is null)
         {
             return false;
         }
