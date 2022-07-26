@@ -7,7 +7,7 @@ public static class BoundedContextExtensions
 {
     public static async ValueTask<SaveOperationResult> BoundedContextSaveChangesAsync(
         this DbContext context,
-        IDomainEventDispatcher eventDispatcher,
+        MediatR.IPublisher eventDispatcher,
         IClock clock,
         int userId,
         Func<CancellationToken, ValueTask<int>> saveChangesAsync,
@@ -72,7 +72,7 @@ public static class BoundedContextExtensions
                 {
                     foreach (var domainEvent in aggregateRoot.DomainEvents)
                     {
-                        await eventDispatcher.DispatchAsync(domainEvent, ct);
+                        await eventDispatcher.Publish(domainEvent, ct);
                     }
 
                     aggregateRoot.ClearDomainEvents();

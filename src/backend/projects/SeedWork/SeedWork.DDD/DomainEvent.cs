@@ -1,3 +1,3 @@
 global using NodaTime;
 
-public record DomainEvent { }
+public record DomainEvent : MediatR.INotification { }

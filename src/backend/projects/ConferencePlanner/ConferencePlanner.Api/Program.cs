@@ -1,21 +1,20 @@
 global using ConferencePlanner.Infrastructure;
 global using ConferencePlanner.Domain.Entities;
-
-using ConferencePlanner.Api;
-using ConferencePlanner.GraphQL.Types;
+//using ConferencePlanner.GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using Serilog.Events;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Authorization;
 using HealthChecks.UI.Client;
 using Bogus;
 using ConferencePlanner.Api.Meetings;
 using ConferencePlanner.Application.Meetings;
 using ConferencePlanner.Infrastructure.Meetings;
-using Microsoft.AspNetCore.Builder;
 using Prometheus;
+using MediatR;
+using System.Reflection;
+using HotChocolate.Types.NodaTime;
+using HotChocolate.Execution.Configuration;
+using ConferencePlanner.GraphQL.Types;
 
 Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
@@ -30,34 +29,40 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                 .WriteTo.Console());
 
 builder.Services.AddDbContextFactory<ApplicationDbContext>(
-    options => options.UseNpgsql(builder.Configuration.GetConnectionString("AppDb")));
+    options =>
+    {
+        options.UseNpgsql(builder.Configuration.GetConnectionString("AppDb"), o => o.UseNodaTime().EnableRetryOnFailure());
+
+        if (!builder.Environment.IsProduction())
+        {
+            options.EnableSensitiveDataLogging();
+        }
+    });
 
 builder.Services
     .AddGraphQLServer()
     .RegisterDbContext<ApplicationDbContext>(DbContextKind.Synchronized)
-    .RegisterService<AddMeetingCommand>()
     .AddQueryType()
     .AddMutationType()
     .AddSubscriptionType()
         .AddTypeExtension<MeetingQueries>()
         .AddTypeExtension<MeetingMutations>()
         .AddTypeExtension<MeetingSubscriptions>()
-        .AddType<MeetingType>()
+    .AddType<MeetingType>()
+    .AddType<InstantType>()
     .AddDefaultTransactionScopeHandler()
     .AddFiltering()
     .AddSorting()
     .AddProjections()
-    .InitializeOnStartup()
     .AddInMemorySubscriptions();
 
-builder.Services.AddDomainEventsDispatcher();
+builder.Services.AddMediatR(typeof(Program).GetTypeInfo().Assembly);
 builder.Services.AddScoped<IMeetingsRepository, MeetingsRepository>();
 builder.Services.AddScoped<AddMeetingCommand>();
 
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<ApplicationDbContext>("database")
     .ForwardToPrometheus();
-    
 
 var app = builder.Build();
 
@@ -92,8 +97,8 @@ try
                     .RuleFor(f => f.FirstName, f => f.Name.FirstName())
                     .RuleFor(d => d.LastName, f => f.Name.LastName());
                 var faker = new Faker<Meeting>()
+                    .CustomInstantiator(f => new Meeting(f.Company.CatchPhrase()))
                     .RuleFor(d => d.Id, 0)
-                    .RuleFor(d => d.Name, f => f.Company.CatchPhrase())
                     .RuleFor(d => d.Organizer, f => new MeetingOrganizer(f.Person.FirstName, f.Person.LastName))
                     .RuleFor(d => d.Participiants, f => fakerPart.GenerateBetween(2, 20));
 
@@ -115,3 +120,29 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+public static class SchemaExtensions
+{
+    public static IRequestExecutorBuilder AddNodaTime(
+                this IRequestExecutorBuilder schemaBuilder,
+                params Type[] excludeTypes)
+    {
+        var nodaTimeTypes = new[]
+        {
+            typeof(DateTimeZoneType), typeof(DurationType), typeof(InstantType),
+            typeof(IsoDayOfWeekType), typeof(LocalDateTimeType), typeof(LocalDateType),
+            typeof(LocalTimeType), typeof(OffsetDateTimeType), typeof(OffsetDateType),
+            typeof(OffsetTimeType), typeof(OffsetType), typeof(PeriodType),
+            typeof(ZonedDateTimeType),
+        };
+        foreach (var type in nodaTimeTypes.Except(excludeTypes))
+        {
+            schemaBuilder = schemaBuilder.AddType(type);
+        }
+
+        return schemaBuilder;
+    }
+}
+
+
+public partial class Program { }

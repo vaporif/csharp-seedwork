@@ -1,7 +1,9 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class AggregateRoot : ISoftDeleteEntity, IAuditEntity
 {
+    [NotMapped]
     private List<DomainEvent> _events = new List<DomainEvent>();
 
     public bool IsDeleted { get; private set; }
@@ -14,6 +16,7 @@ public class AggregateRoot : ISoftDeleteEntity, IAuditEntity
 
     public Instant LastModifiedDate { get; private set; }
 
+    [NotMapped]
     public ReadOnlyCollection<DomainEvent> DomainEvents => _events.AsReadOnly();
 
     public void AddDomainEvent(DomainEvent @event)

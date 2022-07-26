@@ -6,12 +6,12 @@ namespace ConferencePlanner.Infrastructure
 {
     public class ApplicationDbContext : DbContext
     {
-        private readonly IDomainEventDispatcher _domainEventDispatcher;
+        private readonly MediatR.IPublisher _domainEventDispatcher;
         private readonly IClock _clock;
 
         public ApplicationDbContext(
-            DbContextOptions<ApplicationDbContext> options, 
-            IDomainEventDispatcher domainEventDispatcher,
+            DbContextOptions<ApplicationDbContext> options,
+            MediatR.IPublisher domainEventDispatcher,
             IClock? clock = null) : base(options)
         {
             _domainEventDispatcher = domainEventDispatcher ?? throw new ArgumentNullException(nameof(domainEventDispatcher));
@@ -46,16 +46,16 @@ namespace ConferencePlanner.Infrastructure
 
         public DbSet<Attendee> Attendees { get; set; } = default!;
 
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            var result = await this.BoundedContextSaveChangesAsync(
-                _domainEventDispatcher, 
-                _clock,
-                0, 
-                async (ct) => await base.SaveChangesAsync(ct), 
-                cancellationToken);
+        // public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        // {
+        //     var result = await this.BoundedContextSaveChangesAsync(
+        //         _domainEventDispatcher, 
+        //         _clock,
+        //         0, 
+        //         async (ct) => await base.SaveChangesAsync(ct), 
+        //         cancellationToken);
 
-            return result.AffectedRows;
-        }
+        //     return result.AffectedRows;
+        // }
     }
 }
