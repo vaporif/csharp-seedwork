@@ -10,20 +10,21 @@ using MassTransit.AmazonSqsTransport;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SeedWork.Distributed;
 
 namespace SeedWork.Distributed;
 
-public class SqsIntegrationEventService<TContext> : IIntegrationEventService
+public class SqsIntegrationEventService<TContext> : IntegrationEventService<TContext>
     where TContext : DbContext
 {
     private readonly IOptions<QueueConfiguration> _config;
 
-    public IntegrationEventService(
+    public SqsIntegrationEventService(
         IOptions<QueueConfiguration> config,
         IPublishEndpoint bus,
         TContext context,
         Func<DbConnection, IIntegrationEventOutboxService> outboxServiceFactory,
-        ILogger<SqsIntegrationEventService<TContext>> logger) : base(bus, context, outboxServiceFactory) 
+        ILogger<SqsIntegrationEventService<TContext>> logger) : base(bus, context, outboxServiceFactory, logger) 
 
     {
         _config = config ?? throw new ArgumentNullException(nameof(config));
@@ -31,6 +32,6 @@ public class SqsIntegrationEventService<TContext> : IIntegrationEventService
 
     protected override async Task PublishBatchAsync(IEnumerable<object> messages, Type messageType, CancellationToken cancellationToken = default)
     {
-        await Task.WhenAll(messages.Select(x => _bus.Publish(x, messageType, context => context.SetGroupId(_config.Value.SqsQueueGroupId), cancellationToken)));
+        await Task.WhenAll(messages.Select(x => Bus.Publish(x, messageType, context => context.SetGroupId(_config.Value.SqsQueueGroupId), cancellationToken)));
     }
 }

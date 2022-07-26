@@ -8,9 +8,9 @@ using MassTransit.Saga;
 public class FifoEndpointNameFormatter : IEndpointNameFormatter
 {
     private readonly IEndpointNameFormatter _formatter;
-    private readonly string _prefix;
+    private readonly string? _prefix;
 
-    public FifoEndpointNameFormatter(IEndpointNameFormatter formatter, string prefix = null)
+    public FifoEndpointNameFormatter(IEndpointNameFormatter formatter, string? prefix = null)
     {
         _formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
         _prefix = prefix;
