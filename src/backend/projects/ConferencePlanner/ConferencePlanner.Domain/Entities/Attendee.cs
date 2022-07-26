@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ConferencePlanner.Domain.Entities
 {
-    public class Attendee
+    public class Attendee : SoftDeleteEntity
     {
         public int Id { get; set; }
 

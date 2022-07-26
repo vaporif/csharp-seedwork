@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+using ConferencePlanner.Application.Meetings;
 
 namespace ConferencePlanner.Api.Meetings
 {
@@ -10,15 +10,15 @@ namespace ConferencePlanner.Api.Meetings
         [UseFiltering]
         [UseSorting]
         public IQueryable<Meeting> GetMeeting(
-            ApplicationDbContext context)
-            => context.Meetings.AsNoTracking();
+            [Service] IMeetingsRepository repo)
+            => repo.GetQueryable();
 
         [UseFirstOrDefault]
         [UseProjection]
         public IQueryable<Meeting> GetMeetingById(
             int id,
-             ApplicationDbContext context,
+            [Service] IMeetingsRepository repo,
             CancellationToken cancellationToken)
-            => context.Meetings.Where(d => d.Id == id).AsNoTracking();
+            => repo.GetQueryable().Where(d => d.Id == id);
     }
 }

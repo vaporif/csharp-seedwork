@@ -1,14 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\SeedWork\SeedWork.Common\SeedWork.Common.csproj" />
-    <ProjectReference Include="..\..\SeedWork\SeedWork.DDD\SeedWork.DDD.csproj" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConferencePlanner.Domain\ConferencePlanner.Domain.csproj" />
+  </ItemGroup>
 
 </Project>
