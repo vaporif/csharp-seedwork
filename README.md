@@ -7,7 +7,7 @@ Domain Events are dispatched in process via Mediatr Notifications.
 
 Integration Events are dispatched via MassTransit with Outbox pattern ensuring events are persisted first to sql database before publish to Queue.
 
-Currently there's one simple example showing monolithic app with GraphQl as Api layer.
+Currently there's one simple example showing monolithic app with GraphQl HotChocolate as Api layer.
 
 As this is a cutout refactoring of existing project in production it's currently under construction.
 
