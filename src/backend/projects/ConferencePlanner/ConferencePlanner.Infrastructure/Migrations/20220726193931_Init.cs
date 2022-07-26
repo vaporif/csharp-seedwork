@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -23,9 +22,9 @@ namespace ConferencePlanner.Infrastructure.Migrations
                     EmailAddress = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Country = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     CreatedByUser = table.Column<int>(type: "integer", nullable: false),
-                    CreatedDate = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastModifiedByUser = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedDate = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -42,9 +41,9 @@ namespace ConferencePlanner.Infrastructure.Migrations
                     FirstName = table.Column<string>(type: "text", nullable: true),
                     LastName = table.Column<string>(type: "text", nullable: true),
                     CreatedByUser = table.Column<int>(type: "integer", nullable: false),
-                    CreatedDate = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastModifiedByUser = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedDate = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -104,9 +103,9 @@ namespace ConferencePlanner.Infrastructure.Migrations
                     OrganizerId = table.Column<int>(type: "integer", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedByUser = table.Column<int>(type: "integer", nullable: false),
-                    CreatedDate = table.Column<Instant>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LastModifiedByUser = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedDate = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
+                    LastModifiedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -1,6 +1,5 @@
 using ConferencePlanner.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using NodaTime;
 
 namespace ConferencePlanner.Infrastructure
 {
@@ -12,10 +11,10 @@ namespace ConferencePlanner.Infrastructure
         public ApplicationDbContext(
             DbContextOptions<ApplicationDbContext> options,
             MediatR.IPublisher domainEventDispatcher,
-            IClock? clock = null) : base(options)
+            IClock clock) : base(options)
         {
             _domainEventDispatcher = domainEventDispatcher ?? throw new ArgumentNullException(nameof(domainEventDispatcher));
-            _clock = clock ?? SystemClock.Instance;
+            _clock = clock ?? throw new ArgumentNullException(nameof(clock));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

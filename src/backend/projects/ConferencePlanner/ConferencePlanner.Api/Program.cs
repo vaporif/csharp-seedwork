@@ -12,8 +12,6 @@ using ConferencePlanner.Infrastructure.Meetings;
 using Prometheus;
 using MediatR;
 using System.Reflection;
-using HotChocolate.Types.NodaTime;
-using HotChocolate.Execution.Configuration;
 using ConferencePlanner.GraphQL.Types;
 
 Log.Logger = new LoggerConfiguration()
@@ -49,7 +47,6 @@ builder.Services
         .AddTypeExtension<MeetingMutations>()
         .AddTypeExtension<MeetingSubscriptions>()
     .AddType<MeetingType>()
-    .AddType<InstantType>()
     .AddDefaultTransactionScopeHandler()
     .AddFiltering()
     .AddSorting()
@@ -59,6 +56,7 @@ builder.Services
 builder.Services.AddMediatR(typeof(Program).GetTypeInfo().Assembly);
 builder.Services.AddScoped<IMeetingsRepository, MeetingsRepository>();
 builder.Services.AddScoped<AddMeetingCommand>();
+builder.Services.AddSingleton<IClock, SystemClock>();
 
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<ApplicationDbContext>("database")
@@ -120,29 +118,5 @@ finally
 {
     Log.CloseAndFlush();
 }
-
-public static class SchemaExtensions
-{
-    public static IRequestExecutorBuilder AddNodaTime(
-                this IRequestExecutorBuilder schemaBuilder,
-                params Type[] excludeTypes)
-    {
-        var nodaTimeTypes = new[]
-        {
-            typeof(DateTimeZoneType), typeof(DurationType), typeof(InstantType),
-            typeof(IsoDayOfWeekType), typeof(LocalDateTimeType), typeof(LocalDateType),
-            typeof(LocalTimeType), typeof(OffsetDateTimeType), typeof(OffsetDateType),
-            typeof(OffsetTimeType), typeof(OffsetType), typeof(PeriodType),
-            typeof(ZonedDateTimeType),
-        };
-        foreach (var type in nodaTimeTypes.Except(excludeTypes))
-        {
-            schemaBuilder = schemaBuilder.AddType(type);
-        }
-
-        return schemaBuilder;
-    }
-}
-
 
 public partial class Program { }

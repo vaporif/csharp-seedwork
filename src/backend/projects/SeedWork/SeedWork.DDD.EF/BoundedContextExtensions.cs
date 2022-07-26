@@ -1,6 +1,5 @@
 global using System;
 global using System.Linq;
-global using NodaTime;
 global using Microsoft.EntityFrameworkCore;
 
 public static class BoundedContextExtensions
@@ -46,14 +45,14 @@ public static class BoundedContextExtensions
                         case EntityState.Added:
                             if (!addedEntities.Contains(auditEntity))
                             {
-                                auditEntity.OnAdded(clock.GetCurrentInstant(), userId);
+                                auditEntity.OnAdded(clock.UtcNow, userId);
                                 addedEntities.Add(auditEntity);
                             }
                             break;
                         case EntityState.Modified:
                             if (!updatedEntities.Contains(auditEntity))
                             {
-                                auditEntity.OnUpdated(clock.GetCurrentInstant(), userId);
+                                auditEntity.OnUpdated(clock.UtcNow, userId);
                                 updatedEntities.Add(auditEntity);
                             }
 

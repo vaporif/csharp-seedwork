@@ -4,7 +4,6 @@ using ConferencePlanner.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -38,7 +37,7 @@ namespace ConferencePlanner.Infrastructure.Migrations
                     b.Property<int>("CreatedByUser")
                         .HasColumnType("integer");
 
-                    b.Property<Instant>("CreatedDate")
+                    b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("EmailAddress")
@@ -56,7 +55,7 @@ namespace ConferencePlanner.Infrastructure.Migrations
                     b.Property<int>("LastModifiedByUser")
                         .HasColumnType("integer");
 
-                    b.Property<Instant>("LastModifiedDate")
+                    b.Property<DateTimeOffset>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastName")
@@ -88,7 +87,7 @@ namespace ConferencePlanner.Infrastructure.Migrations
                     b.Property<int>("CreatedByUser")
                         .HasColumnType("integer");
 
-                    b.Property<Instant>("CreatedDate")
+                    b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsDeleted")
@@ -97,7 +96,7 @@ namespace ConferencePlanner.Infrastructure.Migrations
                     b.Property<int>("LastModifiedByUser")
                         .HasColumnType("integer");
 
-                    b.Property<Instant>("LastModifiedDate")
+                    b.Property<DateTimeOffset>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
@@ -124,7 +123,7 @@ namespace ConferencePlanner.Infrastructure.Migrations
                     b.Property<int>("CreatedByUser")
                         .HasColumnType("integer");
 
-                    b.Property<Instant>("CreatedDate")
+                    b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FirstName")
@@ -136,7 +135,7 @@ namespace ConferencePlanner.Infrastructure.Migrations
                     b.Property<int>("LastModifiedByUser")
                         .HasColumnType("integer");
 
-                    b.Property<Instant>("LastModifiedDate")
+                    b.Property<DateTimeOffset>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastName")

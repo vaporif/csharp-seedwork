@@ -5,13 +5,13 @@ public interface IAuditEntity
 {
     int CreatedByUser { get; }
 
-    Instant CreatedDate { get; }
+    DateTimeOffset CreatedDate { get; }
 
     int LastModifiedByUser { get; }
 
-    Instant LastModifiedDate { get; }
+    DateTimeOffset LastModifiedDate { get; }
 
-    void OnAdded(Instant createdDate, int createdByUser);
+    void OnAdded(DateTimeOffset createdDate, int createdByUser);
 
-    void OnUpdated(Instant lastModifiedDate, int lastModifiedByUser);
+    void OnUpdated(DateTimeOffset lastModifiedDate, int lastModifiedByUser);
 }

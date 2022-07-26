@@ -6,6 +6,7 @@ namespace ConferencePlanner.GraphQL.Types
     {
         protected override void Configure(IObjectTypeDescriptor<Meeting> descriptor)
         {
+            //descriptor.Field(f => f.DomainEvents).Ignore();
             descriptor.Field(f => f.Participiants).UseFiltering();
             descriptor.Field("randomFiled").Resolve(ctx => new Faker().Random.Word())
                 .Type<NonNullType<StringType>>()
