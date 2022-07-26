@@ -5,16 +5,9 @@ namespace ConferencePlanner.Infrastructure
 {
     public class ApplicationDbContext : DbContext
     {
-        private readonly MediatR.IPublisher _domainEventDispatcher;
-        private readonly IClock _clock;
 
-        public ApplicationDbContext(
-            DbContextOptions<ApplicationDbContext> options,
-            MediatR.IPublisher domainEventDispatcher,
-            IClock clock) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            _domainEventDispatcher = domainEventDispatcher ?? throw new ArgumentNullException(nameof(domainEventDispatcher));
-            _clock = clock ?? throw new ArgumentNullException(nameof(clock));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -44,17 +37,5 @@ namespace ConferencePlanner.Infrastructure
         public DbSet<Speaker> Speakers { get; set; } = default!;
 
         public DbSet<Attendee> Attendees { get; set; } = default!;
-
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            var result = await this.BoundedContextSaveChangesAsync(
-                _domainEventDispatcher, 
-                _clock,
-                0, 
-                async (ct) => await base.SaveChangesAsync(ct), 
-                cancellationToken);
-
-            return result.AffectedRows;
-        }
     }
 }

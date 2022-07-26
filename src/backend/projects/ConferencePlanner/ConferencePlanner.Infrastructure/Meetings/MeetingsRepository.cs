@@ -5,50 +5,50 @@ using Microsoft.EntityFrameworkCore;
 namespace ConferencePlanner.Infrastructure.Meetings;
 public class MeetingsRepository : IMeetingsRepository
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly BoundedContext<ApplicationDbContext> _context;
 
-    public MeetingsRepository(ApplicationDbContext dbContext)
+    public MeetingsRepository(BoundedContext<ApplicationDbContext> context)
     {
-        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
     public async ValueTask<Meeting> AddAsync(Meeting entity, CancellationToken ct = default)
     {
-        var e = await _dbContext.AddAsync(entity, ct);
+        var e = await _context.DbContext.AddAsync(entity, ct);
         return e.Entity;
     }
 
     public bool Delete(int id)
     {
-        var entity = _dbContext.Meetings.Find(id);
+        var entity = _context.DbContext.Meetings.Find(id);
         if (entity == null)
         {
             return false;
         }
 
-        _dbContext.Meetings.Remove(entity);
+        _context.DbContext.Meetings.Remove(entity);
         return true;
     }
 
     public async ValueTask<Meeting?> FindAsync(int id)
     {
-        var entity = await _dbContext.Meetings.FindAsync(id);
+        var entity = await _context.DbContext.Meetings.FindAsync(id);
         if (entity is null)
         {
             return null;
         }
 
-        var entry = _dbContext.Entry(entity);
+        var entry = _context.DbContext.Entry(entity);
         await entry.Collection(t => t.Participiants).LoadAsync();
         await entry.Reference(t => t.Organizer).LoadAsync();
 
         return entity;
     }
 
-    public IQueryable<Meeting> GetQueryable() => _dbContext.Meetings.AsNoTracking();
+    public IQueryable<Meeting> GetQueryable() => _context.DbContext.Meetings.AsNoTracking();
 
     public async ValueTask SaveChangesAsync(CancellationToken ct = default)
     {
-        await _dbContext.SaveChangesAsync(ct);
+        await _context.SaveChangesAsync(ct);
     }
 }

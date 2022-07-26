@@ -26,7 +26,7 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                 .Enrich.FromLogContext()
                 .WriteTo.Console());
 
-builder.Services.AddDbContextFactory<ApplicationDbContext>(
+builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(
     options =>
     {
         options.UseNpgsql(builder.Configuration.GetConnectionString("AppDb"), o => o.UseNodaTime());
@@ -39,7 +39,7 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(
 
 builder.Services
     .AddGraphQLServer()
-    .RegisterDbContext<ApplicationDbContext>(DbContextKind.Synchronized)
+    .RegisterDbContext<ApplicationDbContext>(DbContextKind.Pooled)
     .AddQueryType()
     .AddMutationType()
     .AddSubscriptionType()
@@ -57,6 +57,7 @@ builder.Services.AddMediatR(typeof(OrganizerAddedDomainEventHandler).GetTypeInfo
 builder.Services.AddScoped<IMeetingsRepository, MeetingsRepository>();
 builder.Services.AddScoped<AddMeetingCommand>();
 builder.Services.AddScoped<UpdateMeetingCommand>();
+builder.Services.AddScoped<BoundedContext<ApplicationDbContext>>();
 builder.Services.AddSingleton<IClock, SystemClock>();
 
 builder.Services.AddHealthChecks()
