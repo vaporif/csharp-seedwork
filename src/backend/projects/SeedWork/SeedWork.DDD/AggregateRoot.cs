@@ -16,7 +16,7 @@ public class AggregateRoot : ISoftDeleteEntity, IAuditEntity
 
     public ReadOnlyCollection<DomainEvent> DomainEvents => _events.AsReadOnly();
 
-    public void AddEvent(DomainEvent @event)
+    public void AddDomainEvent(DomainEvent @event)
     {
         if (DomainEvents.All(f => !f.Equals(@event)))
         {
