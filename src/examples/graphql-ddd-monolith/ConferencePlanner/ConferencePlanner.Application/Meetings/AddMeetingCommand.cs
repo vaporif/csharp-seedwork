@@ -1,10 +1,10 @@
 using ConferencePlanner.Domain.Entities;
 namespace ConferencePlanner.Application.Meetings;
 
-public class AddMeetingCommand : ICommand<AddMeetingInput> 
+public class AddMeetingCommand : ICommand<AddMeetingInput>
 {
     private readonly IMeetingsRepository _repo;
-    
+
     public AddMeetingPayload? Payload { get; private set; }
 
     public AddMeetingCommand(IMeetingsRepository repo)
@@ -15,7 +15,7 @@ public class AddMeetingCommand : ICommand<AddMeetingInput>
     public async ValueTask HandleAsync(AddMeetingInput input, CancellationToken ct = default)
     {
         var meeting = new Meeting(input.Title);
-        var result = await _repo.AddAsync(meeting);
+        var result = await _repo.AddAsync(meeting, ct);
         await _repo.SaveChangesAsync(ct);
         Payload = new AddMeetingPayload(result);
     }

@@ -11,7 +11,7 @@ namespace ConferencePlanner.Domain.Entities
             FirstName = firstName;
             LastName = lastName;
         }
-        
+
         public int Id { get; set; }
 
         public string? FirstName { get; set; }

@@ -17,7 +17,7 @@ namespace ConferencePlanner.Domain.Entities
         [StringLength(1000)]
         public string? WebSite { get; set; }
 
-        public ICollection<SessionSpeaker> SessionSpeakers { get; set; } = 
+        public ICollection<SessionSpeaker> SessionSpeakers { get; set; } =
             new List<SessionSpeaker>();
     }
 }

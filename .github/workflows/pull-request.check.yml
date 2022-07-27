@@ -2,7 +2,7 @@ name: Pull Request Check
 on:
   pull_request:
     paths:
-      - 'backend/**'
+      - 'src`/**'
       - '.github/workflows/pull-request.check.yml'
 
 concurrency:
