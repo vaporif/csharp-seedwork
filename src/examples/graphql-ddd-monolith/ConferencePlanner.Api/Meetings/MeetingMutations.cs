@@ -1,8 +1,8 @@
-using ConferencePlanner.Application.Meetings;
-using HotChocolate.Subscriptions;
-
 namespace ConferencePlanner.Api.Meetings
 {
+    using ConferencePlanner.Application.Meetings;
+    using HotChocolate.Subscriptions;
+
     [ExtendObjectType(OperationTypeNames.Mutation)]
     public class MeetingMutations
     {
@@ -15,7 +15,7 @@ namespace ConferencePlanner.Api.Meetings
             await command.HandleAsync(input, cancellationToken);
             await eventSender.SendAsync(
                 nameof(MeetingSubscriptions.OnMeetingAdded),
-                command.Payload!.Meeting, cancellationToken);
+                new Meeting("ddd"), cancellationToken);
             return command.Payload!;
         }
 

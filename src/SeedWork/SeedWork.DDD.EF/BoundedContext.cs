@@ -1,9 +1,6 @@
 global using System;
 global using System.Linq;
 global using Microsoft.EntityFrameworkCore;
-using System.Dynamic;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 public class BoundedContext<T> : IAsyncDisposable, IDisposable
     where T : DbContext
@@ -51,6 +48,12 @@ public class BoundedContext<T> : IAsyncDisposable, IDisposable
                             break;
                         case EntityState.Modified:
                             auditEntity.OnUpdated(_clock.UtcNow, currentUserId);
+                            break;
+                        case EntityState.Detached:
+                            break;
+                        case EntityState.Unchanged:
+                            break;
+                        case EntityState.Deleted:
                             break;
                         default:
                             break;

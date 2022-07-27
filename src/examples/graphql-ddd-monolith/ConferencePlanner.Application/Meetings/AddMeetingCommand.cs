@@ -1,22 +1,21 @@
-using ConferencePlanner.Domain.Entities;
-namespace ConferencePlanner.Application.Meetings;
-
-public class AddMeetingCommand : ICommand<AddMeetingInput>
+namespace ConferencePlanner.Application.Meetings
 {
-    private readonly IMeetingsRepository _repo;
+    using ConferencePlanner.Domain.Entities;
 
-    public AddMeetingPayload? Payload { get; private set; }
-
-    public AddMeetingCommand(IMeetingsRepository repo)
+    public class AddMeetingCommand : ICommand<AddMeetingInput>
     {
-        _repo = repo ?? throw new ArgumentNullException(nameof(repo));
-    }
+        private readonly IMeetingsRepository _repo;
 
-    public async ValueTask HandleAsync(AddMeetingInput input, CancellationToken ct = default)
-    {
-        var meeting = new Meeting(input.Title);
-        var result = await _repo.AddAsync(meeting, ct);
-        await _repo.SaveChangesAsync(ct);
-        Payload = new AddMeetingPayload(result);
+        public AddMeetingPayload? Payload { get; private set; }
+
+        public AddMeetingCommand(IMeetingsRepository repo) => _repo = repo ?? throw new ArgumentNullException(nameof(repo));
+
+        public async ValueTask HandleAsync(AddMeetingInput input, CancellationToken ct = default)
+        {
+            var meeting = new Meeting(input.Title);
+            var result = await _repo.AddAsync(meeting, ct);
+            await _repo.SaveChangesAsync(ct);
+            Payload = new AddMeetingPayload(result);
+        }
     }
 }

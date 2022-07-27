@@ -6,10 +6,7 @@ namespace ConferencePlanner.Domain.Entities
         {
         }
 
-        public Meeting(string title)
-        {
-            Name = title;
-        }
+        public Meeting(string title) => Name = title;
 
         public int Id { get; set; }
 

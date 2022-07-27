@@ -1,6 +1,3 @@
-using System;
-
-
 public interface IAuditEntity
 {
     int CreatedByUser { get; }

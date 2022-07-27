@@ -1,5 +1,8 @@
-using ConferencePlanner.Domain.Entities;
-namespace ConferencePlanner.Application.Meetings;
-public interface IMeetingsRepository : IRepository<Meeting>
+namespace ConferencePlanner.Application.Meetings
 {
+    using ConferencePlanner.Domain.Entities;
+
+    public interface IMeetingsRepository : IRepository<Meeting>
+    {
+    }
 }

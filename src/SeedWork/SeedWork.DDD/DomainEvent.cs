@@ -1,1 +1,1 @@
-public record DomainEvent : MediatR.INotification { }
+public abstract record DomainEvent : MediatR.INotification { }

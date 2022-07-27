@@ -1,4 +1,4 @@
-public class SoftDeleteEntity : ISoftDeleteEntity, IAuditEntity
+public abstract class SoftDeleteEntity : ISoftDeleteEntity, IAuditEntity
 {
     public int CreatedByUser { get; set; }
 

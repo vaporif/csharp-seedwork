@@ -1,7 +1,7 @@
-using Bogus;
-
 namespace ConferencePlanner.GraphQL.Types
 {
+    using Bogus;
+
     public class MeetingType : ObjectType<Meeting>
     {
         protected override void Configure(IObjectTypeDescriptor<Meeting> descriptor)
