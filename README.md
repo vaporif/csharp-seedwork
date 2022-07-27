@@ -1,5 +1,5 @@
 # C# SeedWork WIP
-This is a Collection [SeedWork](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/seedwork-domain-model-base-classes-interfaces) projects.
+This is a collection of [SeedWork](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/seedwork-domain-model-base-classes-interfaces) projects.
 
 Provides easy to implement Onion Microservice Domain Driven Design Architecture.
 
