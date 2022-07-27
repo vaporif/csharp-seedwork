@@ -13,6 +13,9 @@ using Prometheus;
 using MediatR;
 using System.Reflection;
 using ConferencePlanner.GraphQL.Types;
+using OpenTelemetry.Trace;
+using HotChocolate.Diagnostics;
+using OpenTelemetry.Resources;
 
 Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
@@ -51,7 +54,30 @@ builder.Services
     .AddFiltering()
     .AddSorting()
     .AddProjections()
-    .AddInMemorySubscriptions();
+    .AddInMemorySubscriptions()
+    .AddApolloTracing()
+    .AddInstrumentation(o =>
+    {
+        o.Scopes = ActivityScopes.All;
+    });
+
+builder.Logging.AddOpenTelemetry(
+    b =>
+    {
+        b.IncludeFormattedMessage = true;
+        b.IncludeScopes = true;
+        b.ParseStateValues = true;
+        b.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("ConferencePlanner"));
+    });
+
+builder.Services.AddOpenTelemetryTracing(
+    b =>
+    {
+        b.AddHttpClientInstrumentation();
+        b.AddAspNetCoreInstrumentation();
+        b.AddHotChocolateInstrumentation();
+        b.AddJaegerExporter();
+    });
 
 builder.Services.AddMediatR(typeof(OrganizerAddedDomainEventHandler).GetTypeInfo().Assembly);
 builder.Services.AddScoped<IMeetingsRepository, MeetingsRepository>();

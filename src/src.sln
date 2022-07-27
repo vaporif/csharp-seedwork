@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{FAC2AC11-11D4-49E9-B29C-4B83810DB6E7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{0C131BF9-BAD4-48E7-B3C5-49A47E59CC01}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "graphql-ddd-monolith", "graphql-ddd-monolith", "{E8E8BB38-FA21-401C-A8AC-08C09A985C8F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "graphql-ddd-monolith", "graphql-ddd-monolith", "{140FE1D4-30C2-4897-8CCD-166A67EAB2CF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConferencePlanner", "ConferencePlanner", "{30919BBA-7DD2-479B-81B7-4E968A0F9128}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConferencePlanner.Api", "examples\graphql-ddd-monolith\ConferencePlanner\ConferencePlanner.Api\ConferencePlanner.Api.csproj", "{9B616CC1-22D1-4FFE-A4D7-5A214547FDF1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConferencePlanner.Api", "examples\graphql-ddd-monolith\ConferencePlanner.Api\ConferencePlanner.Api.csproj", "{99214536-C69A-4683-BD4D-F9E4E863D77B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,14 +18,13 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9B616CC1-22D1-4FFE-A4D7-5A214547FDF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9B616CC1-22D1-4FFE-A4D7-5A214547FDF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9B616CC1-22D1-4FFE-A4D7-5A214547FDF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9B616CC1-22D1-4FFE-A4D7-5A214547FDF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99214536-C69A-4683-BD4D-F9E4E863D77B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99214536-C69A-4683-BD4D-F9E4E863D77B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99214536-C69A-4683-BD4D-F9E4E863D77B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99214536-C69A-4683-BD4D-F9E4E863D77B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E8E8BB38-FA21-401C-A8AC-08C09A985C8F} = {FAC2AC11-11D4-49E9-B29C-4B83810DB6E7}
-		{30919BBA-7DD2-479B-81B7-4E968A0F9128} = {E8E8BB38-FA21-401C-A8AC-08C09A985C8F}
-		{9B616CC1-22D1-4FFE-A4D7-5A214547FDF1} = {30919BBA-7DD2-479B-81B7-4E968A0F9128}
+		{140FE1D4-30C2-4897-8CCD-166A67EAB2CF} = {0C131BF9-BAD4-48E7-B3C5-49A47E59CC01}
+		{99214536-C69A-4683-BD4D-F9E4E863D77B} = {140FE1D4-30C2-4897-8CCD-166A67EAB2CF}
 	EndGlobalSection
 EndGlobal

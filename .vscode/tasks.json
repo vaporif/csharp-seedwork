@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/src/examples/graphql-ddd-monolith/ConferencePlanner/ConferencePlanner.Api/ConferencePlanner.Api.csproj",
+                "${workspaceFolder}/src/examples/graphql-ddd-monolith/ConferencePlanner.Api/ConferencePlanner.Api.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/examples/graphql-ddd-monolith/ConferencePlanner/ConferencePlanner.Api/ConferencePlanner.Api.csproj",
+                "${workspaceFolder}/src/examples/graphql-ddd-monolith/ConferencePlanner.Api/ConferencePlanner.Api.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/src/examples/graphql-ddd-monolith/ConferencePlanner/ConferencePlanner.Api/ConferencePlanner.Api.csproj"
+                "${workspaceFolder}/src/examples/graphql-ddd-monolith/ConferencePlanner.Api/ConferencePlanner.Api.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
