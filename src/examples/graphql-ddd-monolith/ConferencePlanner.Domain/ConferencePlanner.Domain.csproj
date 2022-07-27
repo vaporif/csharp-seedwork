@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\SeedWork\SeedWork.DDD\SeedWork.DDD.csproj" />
+    <ProjectReference Include="..\..\..\SeedWork\SeedWork.DDD\SeedWork.DDD.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
