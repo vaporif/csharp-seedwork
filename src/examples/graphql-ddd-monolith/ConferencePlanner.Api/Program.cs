@@ -2,6 +2,7 @@ global using ConferencePlanner.Domain.Entities;
 global using ConferencePlanner.Infrastructure;
 using System.Reflection;
 using Bogus;
+using ConferencePlanner.Api;
 using ConferencePlanner.Api.Meetings;
 using ConferencePlanner.Application.Meetings;
 using ConferencePlanner.GraphQL.Types;
@@ -9,7 +10,9 @@ using ConferencePlanner.Infrastructure.Meetings;
 using HealthChecks.UI.Client;
 using HotChocolate.Diagnostics;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -92,7 +95,16 @@ builder.Services.AddHealthChecks()
     .AddDbContextCheck<ApplicationDbContext>("database")
     .ForwardToPrometheus();
 
+builder.Services.AddErrorFilter<GraphErrorFilter>();
+
 var app = builder.Build();
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
+app.UseSerilogRequestLogging().UseRouting();
 
 app.UseRouting();
 app.UseHttpMetrics();
@@ -104,7 +116,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapHealthChecks("/health", new HealthCheckOptions
     {
         ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-    });
+    }).WithMetadata(new AllowAnonymousAttribute());
     endpoints.MapGraphQL();
 });
 
