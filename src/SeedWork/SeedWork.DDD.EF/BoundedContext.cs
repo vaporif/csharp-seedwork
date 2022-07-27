@@ -1,8 +1,11 @@
 global using System;
 global using System.Linq;
 global using Microsoft.EntityFrameworkCore;
+using System.Dynamic;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata;
 
-public sealed class BoundedContext<T> : IAsyncDisposable, IDisposable
+public class BoundedContext<T> : IAsyncDisposable, IDisposable
     where T : DbContext
 {
     public T? DbContext { get; private set; }
@@ -16,11 +19,10 @@ public sealed class BoundedContext<T> : IAsyncDisposable, IDisposable
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
     }
 
-    public async ValueTask<SaveOperationResult> SaveChangesAsync(CancellationToken ct = default)
+    public async ValueTask<SaveOperationResult> SaveChangesAsync(
+        bool trackChanges = false, CancellationToken ct = default)
     {
-        var addedEntities = new HashSet<IAuditEntity>();
-        var updatedEntities = new HashSet<IAuditEntity>();
-
+        var updates = new List<EntityUpdates>();
         var rowsCount = 0;
 
         var entries = DbContext!.ChangeTracker.Entries().ToArray();
@@ -39,21 +41,36 @@ public sealed class BoundedContext<T> : IAsyncDisposable, IDisposable
                     switch (entry.State)
                     {
                         case EntityState.Added:
-                            if (!addedEntities.Contains(auditEntity))
+                            auditEntity.OnAdded(_clock.UtcNow, 0);
+
+                            if(trackChanges)
                             {
-                                auditEntity.OnAdded(_clock.UtcNow, 0);
-                                addedEntities.Add(auditEntity);
-                            }
-                            break;
-                        case EntityState.Modified:
-                            if (!updatedEntities.Contains(auditEntity))
-                            {
-                                auditEntity.OnUpdated(_clock.UtcNow, 0);
-                                updatedEntities.Add(auditEntity);
+                                var changes = GetPropertyChanges(entry);
+                                updates.Add(new EntityUpdates(entry.Entity));
                             }
 
                             break;
-                        default: break;
+                        case EntityState.Modified:
+                            auditEntity.OnUpdated(_clock.UtcNow, 0);
+
+                            if (trackChanges)
+                            {
+                                var entityId = GetPrimaryKeyObject(auditEntity);
+                                var changes = GetPropertyChanges(entry);
+                                updates.Add(new EntityUpdates(entry.Entity, entityId, changes));
+                            }
+
+                            break;
+                        case EntityState.Deleted:
+                            if (trackChanges)
+                            {
+                                var entityId = GetPrimaryKeyObject(auditEntity);
+                                var changes = GetPropertyChanges(entry);
+                                updates.Add(new EntityUpdates(entry.Entity, entityId));
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
 
@@ -85,7 +102,7 @@ public sealed class BoundedContext<T> : IAsyncDisposable, IDisposable
                 .ToArray();
         } while (entries.Any());
 
-        return new SaveOperationResult(rowsCount, addedEntities.ToList(), updatedEntities.ToList());
+        return new SaveOperationResult(rowsCount, updates.ToArray());
     }
 
     public void Dispose()
@@ -102,6 +119,37 @@ public sealed class BoundedContext<T> : IAsyncDisposable, IDisposable
 #pragma warning disable CA1816 // Dispose methods should call SuppressFinalize
         GC.SuppressFinalize(this);
 #pragma warning restore CA1816 // Dispose methods should call SuppressFinalize
+    }
+
+    private static UpdatedEntityPropertyChange[] GetPropertyChanges(EntityEntry entry)
+    {
+        return entry.Properties.Where(prop => prop.IsModified).Select(prop =>
+            new UpdatedEntityPropertyChange(prop.Metadata.Name, prop.CurrentValue, prop.OriginalValue)).ToArray();
+    }
+
+    private object GetPrimaryKeyObject(object entity)
+    {
+        var keyProps = GetPrimaryKeyProperties(entity).ToList();
+        var expandoKeyObject = new ExpandoObject();
+        var expandoCollection = (ICollection<KeyValuePair<string, object>>)expandoKeyObject!;
+
+        foreach (var x in keyProps)
+        {
+            expandoCollection.Add(new KeyValuePair<string, object>(x.Name, entity.GetPropertyValue(x.Name)));
+        }
+
+        return expandoKeyObject;
+    }
+
+    private object[] GetPrimaryKeys(object entity)
+    {
+        var keyProps = GetPrimaryKeyProperties(entity);
+        return keyProps.Select(x => entity.GetPropertyValue(x.Name)).ToArray();
+    }
+
+    private IList<IProperty> GetPrimaryKeyProperties(object entity)
+    {
+        return DbContext!.Model.FindEntityType(entity.GetType())?.FindPrimaryKey()?.Properties.ToList()!;
     }
 
     private void Dispose(bool disposing)
