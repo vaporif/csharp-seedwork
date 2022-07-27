@@ -1,3 +1,7 @@
+global using System;
+global using System.Linq;
+global using Microsoft.EntityFrameworkCore;
+
 public sealed class BoundedContext<T> : IAsyncDisposable, IDisposable
     where T : DbContext
 {
