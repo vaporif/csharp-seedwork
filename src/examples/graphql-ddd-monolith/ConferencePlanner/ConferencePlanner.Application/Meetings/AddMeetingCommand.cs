@@ -1,10 +1,10 @@
 using ConferencePlanner.Domain.Entities;
 namespace ConferencePlanner.Application.Meetings;
 
-public class AddMeetingCommand : ICommand<AddMeetingInput> 
+public class AddMeetingCommand : ICommand<AddMeetingInput>
 {
     private readonly IMeetingsRepository _repo;
-    
+
     public AddMeetingPayload? Payload { get; private set; }
 
     public AddMeetingCommand(IMeetingsRepository repo)
