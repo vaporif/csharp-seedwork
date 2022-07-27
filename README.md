@@ -14,8 +14,7 @@ As this is a cutout refactoring of existing project in production it's currently
 TODO:
 
 1. Add Microservice example
-1. Add Custom OpenId Provider via OpenIdDict
-1. Testing
+1. Tests
 1. Nuget publish
 
 
