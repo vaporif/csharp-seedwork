@@ -1,54 +1,50 @@
-using ConferencePlanner.Application.Meetings;
-using ConferencePlanner.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-
-namespace ConferencePlanner.Infrastructure.Meetings;
-public class MeetingsRepository : IMeetingsRepository
+namespace ConferencePlanner.Infrastructure.Meetings
 {
-    private readonly BoundedContext<ApplicationDbContext> _context;
+    using ConferencePlanner.Application.Meetings;
+    using ConferencePlanner.Domain.Entities;
+    using Microsoft.EntityFrameworkCore;
 
-    public MeetingsRepository(BoundedContext<ApplicationDbContext> context)
+    public class MeetingsRepository : IMeetingsRepository
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-    }
+        private readonly BoundedContext<ApplicationDbContext> _context;
 
-    public async ValueTask<Meeting> AddAsync(Meeting entity, CancellationToken ct = default)
-    {
-        var e = await _context.DbContext!.AddAsync(entity, ct);
-        return e!.Entity!;
-    }
+        public MeetingsRepository(BoundedContext<ApplicationDbContext> context) => _context = context ?? throw new ArgumentNullException(nameof(context));
 
-    public bool Delete(int id)
-    {
-        var entity = _context.DbContext!.Meetings.Find(id);
-        if (entity is null)
+        public async ValueTask<Meeting> AddAsync(Meeting entity, CancellationToken ct = default)
         {
-            return false;
+            var e = await _context.DbContext!.AddAsync(entity, ct);
+            return e!.Entity!;
         }
 
-        _context.DbContext!.Meetings.Remove(entity);
-        return true;
-    }
-
-    public async ValueTask<Meeting?> FindAsync(int id)
-    {
-        var entity = await _context.DbContext!.Meetings.FindAsync(id);
-        if (entity is null)
+        public bool Delete(int id)
         {
-            return null;
+            var entity = _context.DbContext!.Meetings.Find(id);
+            if (entity is null)
+            {
+                return false;
+            }
+
+            _context.DbContext!.Meetings.Remove(entity);
+            return true;
         }
 
-        var entry = _context.DbContext!.Entry(entity);
-        await entry.Collection(t => t.Participiants).LoadAsync();
-        await entry.Reference(t => t.Organizer).LoadAsync();
+        public async ValueTask<Meeting?> FindAsync(int id)
+        {
+            var entity = await _context.DbContext!.Meetings.FindAsync(id);
+            if (entity is null)
+            {
+                return null;
+            }
 
-        return entity;
-    }
+            var entry = _context.DbContext!.Entry(entity);
+            await entry.Collection(t => t.Participiants).LoadAsync();
+            await entry.Reference(t => t.Organizer).LoadAsync();
 
-    public IQueryable<Meeting> GetQueryable() => _context.DbContext!.Meetings.AsNoTracking();
+            return entity;
+        }
 
-    public async ValueTask SaveChangesAsync(CancellationToken ct = default)
-    {
-        await _context.SaveChangesAsync(ct);
+        public IQueryable<Meeting> GetQueryable() => _context.DbContext!.Meetings.AsNoTracking();
+
+        public async ValueTask SaveChangesAsync(CancellationToken ct = default) => await _context.SaveChangesAsync(ct);
     }
 }

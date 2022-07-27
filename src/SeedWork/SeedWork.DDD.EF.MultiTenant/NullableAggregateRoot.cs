@@ -1,7 +1,7 @@
 using System;
 using SeedWork.DDD;
 
-public class NullableTenantAggregateRoot : AggregateRoot, INullableTenantEntity
+public abstract class NullableTenantAggregateRoot : AggregateRoot, INullableTenantEntity
 {
     public Guid? TenantId { get; set; }
 

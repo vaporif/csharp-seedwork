@@ -1,8 +1,8 @@
-using ConferencePlanner.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-
 namespace ConferencePlanner.Infrastructure
 {
+    using ConferencePlanner.Domain.Entities;
+    using Microsoft.EntityFrameworkCore;
+
     public class ApplicationDbContext : DbContext
     {
 

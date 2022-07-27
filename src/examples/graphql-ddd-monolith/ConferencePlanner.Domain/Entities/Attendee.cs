@@ -1,8 +1,8 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
 namespace ConferencePlanner.Domain.Entities
 {
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
     public class Attendee : SoftDeleteEntity
     {
         public int Id { get; set; }

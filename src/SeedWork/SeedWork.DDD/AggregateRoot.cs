@@ -2,11 +2,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using HotChocolate;
 
-public class AggregateRoot : ISoftDeleteEntity, IAuditEntity
+public abstract class AggregateRoot : ISoftDeleteEntity, IAuditEntity
 {
     [NotMapped]
     [GraphQLIgnore]
-    private List<DomainEvent> _events = new List<DomainEvent>();
+    private readonly List<DomainEvent> _events = new();
 
     public bool IsDeleted { get; set; }
 

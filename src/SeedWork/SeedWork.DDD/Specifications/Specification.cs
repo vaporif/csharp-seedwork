@@ -1,18 +1,19 @@
-namespace SeedWork.DDD.Specifications;
-
-using System.Linq.Expressions;
-
-public abstract class Specification<T>
+namespace SeedWork.DDD.Specifications
 {
-    public abstract Expression<Func<T, bool>> Expression { get; }
+    using System.Linq.Expressions;
 
-    public bool IsSatisfiedBy(T entity)
+    public abstract class Specification<T>
     {
-        var predicate = Expression.Compile();
-        return predicate(entity);
+        public abstract Expression<Func<T, bool>> Expression { get; }
+
+        public bool IsSatisfiedBy(T entity)
+        {
+            var predicate = Expression.Compile();
+            return predicate(entity);
+        }
+
+        public Specification<T> And(Specification<T> specification) => new AndSpecification<T>(this, specification);
+
+        public Specification<T> AndNot(Specification<T> specification) => new AndNotSpecification<T>(this, specification);
     }
-
-    public Specification<T> And(Specification<T> specification) => new AndSpecification<T>(this, specification);
-
-    public Specification<T> AndNot(Specification<T> specification) => new AndNotSpecification<T>(this, specification);
 }

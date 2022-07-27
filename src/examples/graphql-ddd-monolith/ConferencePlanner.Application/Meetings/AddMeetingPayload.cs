@@ -1,3 +1,6 @@
-using ConferencePlanner.Domain.Entities;
-namespace ConferencePlanner.Application.Meetings;
-public record AddMeetingPayload(Meeting Meeting);
+namespace ConferencePlanner.Application.Meetings
+{
+    using ConferencePlanner.Domain.Entities;
+
+    public record AddMeetingPayload(Meeting Meeting);
+}

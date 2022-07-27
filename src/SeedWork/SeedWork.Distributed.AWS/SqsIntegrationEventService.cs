@@ -14,7 +14,7 @@ using SeedWork.Distributed;
 
 namespace SeedWork.Distributed;
 
-public class SqsIntegrationEventService<TContext> : IntegrationEventService<TContext>
+public sealed class SqsIntegrationEventService<TContext> : IntegrationEventService<TContext>
     where TContext : DbContext
 {
     private readonly IOptions<QueueConfiguration> _config;
@@ -24,7 +24,7 @@ public class SqsIntegrationEventService<TContext> : IntegrationEventService<TCon
         IPublishEndpoint bus,
         TContext context,
         Func<DbConnection, IIntegrationEventOutboxService> outboxServiceFactory,
-        ILogger<SqsIntegrationEventService<TContext>> logger) : base(bus, context, outboxServiceFactory, logger) 
+        ILogger<SqsIntegrationEventService<TContext>> logger) : base(bus, context, outboxServiceFactory, logger)
 
     {
         _config = config ?? throw new ArgumentNullException(nameof(config));

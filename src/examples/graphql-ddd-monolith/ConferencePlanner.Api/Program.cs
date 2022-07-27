@@ -1,21 +1,20 @@
-global using ConferencePlanner.Infrastructure;
 global using ConferencePlanner.Domain.Entities;
-//using ConferencePlanner.GraphQL.Types;
-using Microsoft.EntityFrameworkCore;
-using Serilog;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using HealthChecks.UI.Client;
+global using ConferencePlanner.Infrastructure;
+using System.Reflection;
 using Bogus;
 using ConferencePlanner.Api.Meetings;
 using ConferencePlanner.Application.Meetings;
-using ConferencePlanner.Infrastructure.Meetings;
-using Prometheus;
-using MediatR;
-using System.Reflection;
 using ConferencePlanner.GraphQL.Types;
-using OpenTelemetry.Trace;
+using ConferencePlanner.Infrastructure.Meetings;
+using HealthChecks.UI.Client;
 using HotChocolate.Diagnostics;
+using MediatR;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using Prometheus;
+using Serilog;
 
 Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
@@ -29,16 +28,21 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                 .Enrich.FromLogContext()
                 .WriteTo.Console());
 
-builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(
-    options =>
-    {
-        options.UseNpgsql(builder.Configuration.GetConnectionString("AppDb"), o => o.UseNodaTime());
+// NOTE: Used in graphQl
+builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(RegisterDbContext);
 
-        if (!builder.Environment.IsProduction())
-        {
-            options.EnableSensitiveDataLogging();
-        }
-    });
+// NOTE: Used for healthcheck
+builder.Services.AddDbContext<ApplicationDbContext>(RegisterDbContext);
+
+void RegisterDbContext(DbContextOptionsBuilder options)
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("AppDb"), o => o.UseRelationalNulls(true));
+
+    if (!builder.Environment.IsProduction())
+    {
+        options.EnableSensitiveDataLogging();
+    }
+}
 
 builder.Services
     .AddGraphQLServer()
@@ -56,10 +60,7 @@ builder.Services
     .AddProjections()
     .AddInMemorySubscriptions()
     .AddApolloTracing()
-    .AddInstrumentation(o =>
-    {
-        o.Scopes = ActivityScopes.All;
-    });
+    .AddInstrumentation(o => o.Scopes = ActivityScopes.All);
 
 builder.Logging.AddOpenTelemetry(
     b =>
@@ -113,7 +114,7 @@ try
     {
         var services = scope.ServiceProvider;
         var context = services.GetRequiredService<IDbContextFactory<ApplicationDbContext>>();
-        await using ApplicationDbContext dbContext = context.CreateDbContext();
+        await using var dbContext = context.CreateDbContext();
 
         if (await dbContext.Database.EnsureCreatedAsync())
         {

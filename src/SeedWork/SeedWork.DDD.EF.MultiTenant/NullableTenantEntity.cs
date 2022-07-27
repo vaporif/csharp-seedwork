@@ -1,7 +1,7 @@
 using System;
 using SeedWork.DDD;
 
-public class NullableTenantEntity : SoftDeleteEntity, INullableTenantEntity
+public abstract class NullableTenantEntity : SoftDeleteEntity, INullableTenantEntity
 {
     public Guid? TenantId { get; set; }
 

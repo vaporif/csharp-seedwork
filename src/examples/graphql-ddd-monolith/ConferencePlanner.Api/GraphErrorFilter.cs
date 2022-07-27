@@ -4,10 +4,7 @@ namespace ConferencePlanner.Api
     {
         private readonly ILogger _logger;
 
-        public GraphErrorFilter(ILogger<IErrorFilter> logger)
-        {
-            _logger = logger;
-        }
+        public GraphErrorFilter(ILogger<IErrorFilter> logger) => _logger = logger;
 
         public IError OnError(IError error)
         {

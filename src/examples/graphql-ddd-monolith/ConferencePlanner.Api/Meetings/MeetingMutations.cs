@@ -1,8 +1,8 @@
-using ConferencePlanner.Application.Meetings;
-using HotChocolate.Subscriptions;
-
 namespace ConferencePlanner.Api.Meetings
 {
+    using ConferencePlanner.Application.Meetings;
+    using HotChocolate.Subscriptions;
+
     [ExtendObjectType(OperationTypeNames.Mutation)]
     public class MeetingMutations
     {

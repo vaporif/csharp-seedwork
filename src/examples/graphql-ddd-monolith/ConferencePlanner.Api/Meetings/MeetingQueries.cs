@@ -1,7 +1,7 @@
-using ConferencePlanner.Application.Meetings;
-
 namespace ConferencePlanner.Api.Meetings
 {
+    using ConferencePlanner.Application.Meetings;
+
     [ExtendObjectType(OperationTypeNames.Query)]
     public class MeetingQueries
     {

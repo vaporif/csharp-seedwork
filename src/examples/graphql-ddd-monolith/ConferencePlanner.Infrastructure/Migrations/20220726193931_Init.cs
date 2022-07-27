@@ -1,11 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-
 #nullable disable
 
 namespace ConferencePlanner.Infrastructure.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Migrations;
+    using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+
     public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,10 +27,7 @@ namespace ConferencePlanner.Infrastructure.Migrations
                     LastModifiedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Attendees", x => x.Id);
-                });
+                constraints: table => table.PrimaryKey("PK_Attendees", x => x.Id));
 
             migrationBuilder.CreateTable(
                 name: "MeetingOrganizer",
@@ -46,10 +43,7 @@ namespace ConferencePlanner.Infrastructure.Migrations
                     LastModifiedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MeetingOrganizer", x => x.Id);
-                });
+                constraints: table => table.PrimaryKey("PK_MeetingOrganizer", x => x.Id));
 
             migrationBuilder.CreateTable(
                 name: "Participiant",
@@ -60,10 +54,7 @@ namespace ConferencePlanner.Infrastructure.Migrations
                     FirstName = table.Column<string>(type: "text", nullable: true),
                     LastName = table.Column<string>(type: "text", nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Participiant", x => x.Id);
-                });
+                constraints: table => table.PrimaryKey("PK_Participiant", x => x.Id));
 
             migrationBuilder.CreateTable(
                 name: "Speakers",
@@ -75,10 +66,7 @@ namespace ConferencePlanner.Infrastructure.Migrations
                     Bio = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: true),
                     WebSite = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Speakers", x => x.Id);
-                });
+                constraints: table => table.PrimaryKey("PK_Speakers", x => x.Id));
 
             migrationBuilder.CreateTable(
                 name: "Tracks",
@@ -88,10 +76,7 @@ namespace ConferencePlanner.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tracks", x => x.Id);
-                });
+                constraints: table => table.PrimaryKey("PK_Tracks", x => x.Id));
 
             migrationBuilder.CreateTable(
                 name: "Meetings",
