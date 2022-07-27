@@ -1,29 +1,37 @@
 global using System;
 global using System.Linq;
 global using Microsoft.EntityFrameworkCore;
+using System.Dynamic;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata;
 
-public sealed class BoundedContext<T> : IAsyncDisposable, IDisposable
+public class BoundedContext<T> : IAsyncDisposable, IDisposable
     where T : DbContext
 {
     public T? DbContext { get; private set; }
     private readonly MediatR.IPublisher _eventDispatcher;
+    private readonly ICurrentUserProvider _currentUserProvider;
     private readonly IClock _clock;
 
-    public BoundedContext(IDbContextFactory<T> factory, MediatR.IPublisher eventDispatcher, IClock clock)
+    public BoundedContext(
+        IDbContextFactory<T> factory,
+        MediatR.IPublisher eventDispatcher,
+        ICurrentUserProvider currentUserProvider,
+        IClock clock)
     {
         DbContext = factory.CreateDbContext();
         _eventDispatcher = eventDispatcher ?? throw new ArgumentNullException(nameof(eventDispatcher));
+        _currentUserProvider = currentUserProvider ?? throw new ArgumentNullException(nameof(currentUserProvider));
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
     }
 
-    public async ValueTask<SaveOperationResult> SaveChangesAsync(CancellationToken ct = default)
+    public async ValueTask<int> SaveChangesAsync(CancellationToken ct = default)
     {
-        var addedEntities = new HashSet<IAuditEntity>();
-        var updatedEntities = new HashSet<IAuditEntity>();
-
         var rowsCount = 0;
 
         var entries = DbContext!.ChangeTracker.Entries().ToArray();
+
+        var currentUserId = await _currentUserProvider.GetCurrentUserId();
 
         do
         {
@@ -39,21 +47,13 @@ public sealed class BoundedContext<T> : IAsyncDisposable, IDisposable
                     switch (entry.State)
                     {
                         case EntityState.Added:
-                            if (!addedEntities.Contains(auditEntity))
-                            {
-                                auditEntity.OnAdded(_clock.UtcNow, 0);
-                                addedEntities.Add(auditEntity);
-                            }
+                            auditEntity.OnAdded(_clock.UtcNow, currentUserId);
                             break;
                         case EntityState.Modified:
-                            if (!updatedEntities.Contains(auditEntity))
-                            {
-                                auditEntity.OnUpdated(_clock.UtcNow, 0);
-                                updatedEntities.Add(auditEntity);
-                            }
-
+                            auditEntity.OnUpdated(_clock.UtcNow, currentUserId);
                             break;
-                        default: break;
+                        default:
+                            break;
                     }
                 }
 
@@ -85,7 +85,7 @@ public sealed class BoundedContext<T> : IAsyncDisposable, IDisposable
                 .ToArray();
         } while (entries.Any());
 
-        return new SaveOperationResult(rowsCount, addedEntities.ToList(), updatedEntities.ToList());
+        return rowsCount;
     }
 
     public void Dispose()
