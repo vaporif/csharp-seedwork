@@ -8,21 +8,21 @@ namespace ConferencePlanner.Api.Meetings
     {
         public async Task<AddMeetingPayload> AddMeetingAsync(
             AddMeetingInput input,
-            CancellationToken cancellationToken,
             [Service] AddMeetingCommand command,
-            [Service] ITopicEventSender eventSender)
+            [Service] ITopicEventSender eventSender,
+            CancellationToken cancellationToken)
         {
             await command.HandleAsync(input, cancellationToken);
             await eventSender.SendAsync(
                 nameof(MeetingSubscriptions.OnMeetingAdded),
-                command.Payload!.Meeting);
+                command.Payload!.Meeting, cancellationToken);
             return command.Payload!;
         }
 
         public async Task<AddMeetingPayload> UpdateMeetingAsync(
             UpdateMeetingInput input,
-            CancellationToken cancellationToken,
-            [Service] UpdateMeetingCommand command)
+            [Service] UpdateMeetingCommand command,
+            CancellationToken cancellationToken)
         {
             await command.HandleAsync(input, cancellationToken);
             return command.Payload!;
