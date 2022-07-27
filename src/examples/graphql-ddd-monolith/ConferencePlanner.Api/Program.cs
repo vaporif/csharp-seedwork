@@ -31,11 +31,7 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                 .Enrich.FromLogContext()
                 .WriteTo.Console());
 
-// NOTE: Used in graphQl
 builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(RegisterDbContext);
-
-// NOTE: Used for healthcheck
-builder.Services.AddDbContext<ApplicationDbContext>(RegisterDbContext);
 
 void RegisterDbContext(DbContextOptionsBuilder options)
 {
@@ -92,7 +88,6 @@ builder.Services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
 builder.Services.AddSingleton<IClock, SystemClock>();
 
 builder.Services.AddHealthChecks()
-    .AddDbContextCheck<ApplicationDbContext>("database")
     .ForwardToPrometheus();
 
 builder.Services.AddErrorFilter<GraphErrorFilter>();
