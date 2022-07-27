@@ -58,6 +58,7 @@ builder.Services.AddScoped<IMeetingsRepository, MeetingsRepository>();
 builder.Services.AddScoped<AddMeetingCommand>();
 builder.Services.AddScoped<UpdateMeetingCommand>();
 builder.Services.AddScoped<BoundedContext<ApplicationDbContext>>();
+builder.Services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
 builder.Services.AddSingleton<IClock, SystemClock>();
 
 builder.Services.AddHealthChecks()

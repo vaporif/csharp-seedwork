@@ -10,22 +10,33 @@ public class BoundedContext<T> : IAsyncDisposable, IDisposable
 {
     public T? DbContext { get; private set; }
     private readonly MediatR.IPublisher _eventDispatcher;
+    private readonly ICurrentUserProvider _currentUserProvider;
     private readonly IClock _clock;
+    private readonly List<EntityUpdates> Updates = new List<EntityUpdates>();
 
-    public BoundedContext(IDbContextFactory<T> factory, MediatR.IPublisher eventDispatcher, IClock clock)
+    private readonly bool _trackChanges;
+
+    public BoundedContext(
+        IDbContextFactory<T> factory,
+        MediatR.IPublisher eventDispatcher,
+        ICurrentUserProvider currentUserProvider,
+        IClock clock,
+        bool trackChanges = true)
     {
         DbContext = factory.CreateDbContext();
         _eventDispatcher = eventDispatcher ?? throw new ArgumentNullException(nameof(eventDispatcher));
+        _currentUserProvider = currentUserProvider ?? throw new ArgumentNullException(nameof(currentUserProvider));
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
+        _trackChanges = trackChanges;
     }
 
-    public async ValueTask<SaveOperationResult> SaveChangesAsync(
-        bool trackChanges = false, CancellationToken ct = default)
+    public async ValueTask<int> SaveChangesAsync(CancellationToken ct = default)
     {
-        var updates = new List<EntityUpdates>();
         var rowsCount = 0;
 
         var entries = DbContext!.ChangeTracker.Entries().ToArray();
+
+        var currentUserId = await _currentUserProvider.GetCurrentUserId();
 
         do
         {
@@ -41,32 +52,32 @@ public class BoundedContext<T> : IAsyncDisposable, IDisposable
                     switch (entry.State)
                     {
                         case EntityState.Added:
-                            auditEntity.OnAdded(_clock.UtcNow, 0);
+                            auditEntity.OnAdded(_clock.UtcNow, currentUserId);
 
-                            if(trackChanges)
+                            if (_trackChanges)
                             {
                                 var changes = GetPropertyChanges(entry);
-                                updates.Add(new EntityUpdates(entry.Entity));
+                                Updates.Add(new EntityUpdates(entry.Entity));
                             }
 
                             break;
                         case EntityState.Modified:
-                            auditEntity.OnUpdated(_clock.UtcNow, 0);
+                            auditEntity.OnUpdated(_clock.UtcNow, currentUserId);
 
-                            if (trackChanges)
+                            if (_trackChanges)
                             {
                                 var entityId = GetPrimaryKeyObject(auditEntity);
                                 var changes = GetPropertyChanges(entry);
-                                updates.Add(new EntityUpdates(entry.Entity, entityId, changes));
+                                Updates.Add(new EntityUpdates(entry.Entity, entityId, changes));
                             }
 
                             break;
                         case EntityState.Deleted:
-                            if (trackChanges)
+                            if (_trackChanges)
                             {
                                 var entityId = GetPrimaryKeyObject(auditEntity);
                                 var changes = GetPropertyChanges(entry);
-                                updates.Add(new EntityUpdates(entry.Entity, entityId));
+                                Updates.Add(new EntityUpdates(entry.Entity, entityId));
                             }
                             break;
                         default:
@@ -102,7 +113,7 @@ public class BoundedContext<T> : IAsyncDisposable, IDisposable
                 .ToArray();
         } while (entries.Any());
 
-        return new SaveOperationResult(rowsCount, updates.ToArray());
+        return rowsCount;
     }
 
     public void Dispose()
