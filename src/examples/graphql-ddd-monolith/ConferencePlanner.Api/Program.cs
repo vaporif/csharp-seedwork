@@ -31,6 +31,8 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                 .Enrich.FromLogContext()
                 .WriteTo.Console());
 
+builder.Services.AddResponseCompression();
+
 builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(RegisterDbContext);
 
 void RegisterDbContext(DbContextOptionsBuilder options)
@@ -80,11 +82,11 @@ builder.Services.AddOpenTelemetryTracing(
     });
 
 builder.Services.AddMediatR(typeof(OrganizerAddedDomainEventHandler).GetTypeInfo().Assembly);
-builder.Services.AddScoped<IMeetingsRepository, MeetingsRepository>();
-builder.Services.AddScoped<AddMeetingCommand>();
-builder.Services.AddScoped<UpdateMeetingCommand>();
-builder.Services.AddScoped<BoundedContext<ApplicationDbContext>>();
-builder.Services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
+builder.Services.AddTransient<IMeetingsRepository, MeetingsRepository>();
+builder.Services.AddTransient<AddMeetingCommand>();
+builder.Services.AddTransient<UpdateMeetingCommand>();
+builder.Services.AddTransient<BoundedContext<ApplicationDbContext>>();
+builder.Services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
 builder.Services.AddSingleton<IClock, SystemClock>();
 
 builder.Services.AddHealthChecks()
@@ -93,6 +95,8 @@ builder.Services.AddHealthChecks()
 builder.Services.AddErrorFilter<GraphErrorFilter>();
 
 var app = builder.Build();
+
+app.UseResponseCompression();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
