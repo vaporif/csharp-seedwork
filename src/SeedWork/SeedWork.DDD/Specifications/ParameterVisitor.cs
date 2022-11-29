@@ -2,7 +2,7 @@ namespace SeedWork.DDD.Specifications
 {
     using System.Linq.Expressions;
 
-    internal class ParameterVisitor : ExpressionVisitor
+    public sealed class ParameterVisitor : ExpressionVisitor
     {
         private readonly ParameterExpression _parameter;
         private readonly Expression _value;

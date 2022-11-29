@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/examples/graphql-ddd-monolith/ConferencePlanner.Api/bin/Debug/net6.0/ConferencePlanner.Api.dll",
+            "program": "${workspaceFolder}/src/examples/graphql-ddd-monolith/ConferencePlanner.Api/bin/Debug/net7.0/ConferencePlanner.Api.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/examples/graphql-ddd-monolith/ConferencePlanner.Api",
             "stopAtEntry": false,
