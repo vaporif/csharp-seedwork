@@ -10,4 +10,4 @@ WORKDIR /app
 
 COPY --from=build /app/build /app
 
-ENTRYPOINT ConferencePlanner.Api
+ENTRYPOINT ["./ConferencePlanner.Api"]
