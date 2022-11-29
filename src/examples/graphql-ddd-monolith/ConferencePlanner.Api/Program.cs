@@ -32,6 +32,7 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                 .WriteTo.Console());
 
 builder.Services.AddResponseCompression();
+builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi);
 
 builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(RegisterDbContext);
 
