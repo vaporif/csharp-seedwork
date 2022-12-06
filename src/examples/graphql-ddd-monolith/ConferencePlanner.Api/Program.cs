@@ -32,7 +32,7 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                 .WriteTo.Console());
 
 builder.Services.AddResponseCompression();
-builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi);
+builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
 
 builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(RegisterDbContext);
 
@@ -61,26 +61,27 @@ builder.Services
     .AddSorting()
     .AddProjections()
     .AddInMemorySubscriptions()
-    .AddApolloTracing()
-    .AddInstrumentation(o => o.Scopes = ActivityScopes.All);
+    .InitializeOnStartup();
+    // .AddApolloTracing()
+    // .AddInstrumentation(o => o.Scopes = ActivityScopes.All);
 
-builder.Logging.AddOpenTelemetry(
-    b =>
-    {
-        b.IncludeFormattedMessage = true;
-        b.IncludeScopes = true;
-        b.ParseStateValues = true;
-        b.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("ConferencePlanner"));
-    });
+// builder.Logging.AddOpenTelemetry(
+//     b =>
+//     {
+//         b.IncludeFormattedMessage = true;
+//         b.IncludeScopes = true;
+//         b.ParseStateValues = true;
+//         b.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("ConferencePlanner"));
+//     });
 
-builder.Services.AddOpenTelemetryTracing(
-    b =>
-    {
-        b.AddHttpClientInstrumentation();
-        b.AddAspNetCoreInstrumentation();
-        b.AddHotChocolateInstrumentation();
-        b.AddJaegerExporter();
-    });
+// builder.Services.AddOpenTelemetryTracing(
+//     b =>
+//     {
+//         b.AddHttpClientInstrumentation();
+//         b.AddAspNetCoreInstrumentation();
+//         b.AddHotChocolateInstrumentation();
+//         b.AddJaegerExporter();
+//     });
 
 builder.Services.AddMediatR(typeof(OrganizerAddedDomainEventHandler).GetTypeInfo().Assembly);
 builder.Services.AddTransient<IMeetingsRepository, MeetingsRepository>();
@@ -99,6 +100,7 @@ var app = builder.Build();
 
 app.UseResponseCompression();
 
+
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -111,14 +113,11 @@ app.UseHttpMetrics();
 
 app.UseWebSockets();
 
-app.UseEndpoints(endpoints =>
+app.MapHealthChecks("/health", new HealthCheckOptions
 {
-    endpoints.MapHealthChecks("/health", new HealthCheckOptions
-    {
-        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-    }).WithMetadata(new AllowAnonymousAttribute());
-    endpoints.MapGraphQL();
-});
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+}).WithMetadata(new AllowAnonymousAttribute());
+app.MapGraphQL();
 
 try
 {
